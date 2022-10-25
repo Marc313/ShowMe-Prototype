@@ -111,11 +111,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c48d93279adf6449d8910bda8bab30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controls: {fileID: 11400000, guid: 0c19f35e226163d4d9e6e0965b7ac1a1, type: 2}
-  pickupKey: 101
+  controls: {fileID: 11400000, guid: db750f94bf28a304d80698f10b2c98ce, type: 2}
   speed: 15
   carryingObjectSpeed: 10
   carryingPlayerSpeed: 30
   rotationSpeed: 15
   pickupRange: 1
   carryingPlayer: {fileID: 0}
+  boat: {fileID: 0}

@@ -1,33 +1,17 @@
 using UnityEngine;
 
-public class Pickup : MonoBehaviour, IPickupable
+public class Pickup : APickupable
 {
-    public float modelHeight { get; private set; }
-
     private Transform carrier;
     private bool isPickedUp;
 
-    private void Start()
-    {
-        MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
-        if (renderer != null)
-        {
-            modelHeight = renderer.bounds.extents.y;
-        }
-    }
-
-    public void OnInteract(Player _interacter)
-    {
-        OnPickup(_interacter);
-    }
-
-    public void OnPickup(Player _carrier)
+    public override void OnPickup(Player _carrier)
     {
         isPickedUp = true;
         carrier = _carrier.transform;
     }
 
-    public void OnRelease()
+    public override void OnRelease()
     {
         isPickedUp = false;
         carrier = null;
@@ -37,7 +21,7 @@ public class Pickup : MonoBehaviour, IPickupable
     {
         if (isPickedUp && carrier != null)
         {
-            transform.position = carrier.position;
+            transform.position = carrier.position + carrier.up * modelHeight;
         }
     }
 }

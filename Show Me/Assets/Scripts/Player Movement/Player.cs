@@ -1,24 +1,19 @@
 using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
+public class Player : APickupable, IStateMachineOwner
 {
-    public ScratchPad sharedData { get; } = new ScratchPad();
-    public float modelHeight { get; private set; }
+    public PlayerControls controls;
 
-    [SerializeField] public DirectionControls controls;
-    [SerializeField] public KeyCode interactKey = KeyCode.E;
-    [SerializeField] public KeyCode rowingKey = KeyCode.Q;
+    public ScratchPad sharedData { get; } = new ScratchPad();
+    [HideInInspector] public Player carryingPlayer;
+    [HideInInspector] public Boat boat;
+
     [SerializeField] private float speed = 15f;
     [SerializeField] private float carryingObjectSpeed = 10f;
     [SerializeField] private float carryingPlayerSpeed = 30f;
     [SerializeField] private float rotationSpeed = 15f;
     [SerializeField] private float pickupRange = 0.5f;
-
-    public Player carryingPlayer;
-
-    public Boat boat;
-    //private Transform boatSpot;
 
     private MoveStateMachine moveMachine;
     private float currentSpeed;
@@ -37,12 +32,6 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
         sharedData.Register("defaultSpeed", speed);
         sharedData.Register("carryingSpeed", carryingObjectSpeed);
         sharedData.Register("carryingPlayerSpeed", carryingPlayerSpeed);
-
-        MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
-        if (renderer != null)
-        {
-            modelHeight = renderer.bounds.extents.y;
-        }
     }
 
     private void Update()
@@ -52,12 +41,7 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
         HandleRowingInput();
     }
 
-    public void OnInteract(Player _interacter)
-    {
-        OnPickup(_interacter);
-    }
-
-    public void OnPickup(Player _carrier)
+    public override void OnPickup(Player _carrier)
     {
         carryingPlayer = _carrier;
         transform.position = _carrier.transform.position + Vector3.up * 2f;
@@ -65,7 +49,7 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
         moveMachine.SetState(new PickedupState());
     }
 
-    public void OnRelease()
+    public override void OnRelease()
     {
         carryingPlayer = null;
         moveMachine.SetState(new DefaultMoveState());
@@ -88,7 +72,7 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
 
     public void OverlapInteract()
     {
-        if (Input.GetKeyDown(interactKey))
+        if (controls.InteractKeyPressed())
         {
             // Look for closest target
             IInteractable target = null;
@@ -166,7 +150,7 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
 
     private void HandlePickupInput()
     {
-        if (Input.GetKeyDown(interactKey))
+        if (controls.InteractKeyPressed())
         {
             moveMachine.GetState().HandlePickupInput(this);
         }
@@ -174,7 +158,7 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
 
     private void HandleRowingInput()
     {
-        if (Input.GetKeyDown(rowingKey))
+        if (controls.RowKeyPressed())
         {
             if (boat == null) return;
 

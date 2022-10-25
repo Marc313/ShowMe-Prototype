@@ -18,7 +18,7 @@ public class Boat : MonoBehaviour, IInteractable
         rigidBody = gameObject.GetComponent<Rigidbody>();
     }
 
-    void Update()
+    private void Update()
     {
         // Update player positions
         for (int i = 0; i < embarkedPlayers.Count; i++)

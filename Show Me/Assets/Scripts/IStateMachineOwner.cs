@@ -1,4 +1,4 @@
 public interface IStateMachineOwner
 {
-    public ScratchPad sharedData { get;  }
+    public ScratchPad sharedData { get; }
 }

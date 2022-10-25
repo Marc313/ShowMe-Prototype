@@ -237,14 +237,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player2
       objectReference: {fileID: 0}
-    - target: {fileID: 3734818993924565491, guid: 56bed308950af674d87fb535f25f349a, type: 3}
-      propertyPath: rowingKey
-      value: 257
-      objectReference: {fileID: 0}
-    - target: {fileID: 3734818993924565491, guid: 56bed308950af674d87fb535f25f349a, type: 3}
-      propertyPath: interactKey
-      value: 256
-      objectReference: {fileID: 0}
     - target: {fileID: 3734818993924565495, guid: 56bed308950af674d87fb535f25f349a, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -382,7 +374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 415002430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 47.25}
+  m_LocalPosition: {x: 0, y: 0, z: 107}
   m_LocalScale: {x: 5, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -592,8 +584,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466671635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 17}
-  m_LocalScale: {x: 5, y: 1, z: 4}
+  m_LocalPosition: {x: 0, y: 0, z: 47}
+  m_LocalScale: {x: 5, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -700,6 +692,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3562155097917563865, guid: 9c387fdd0141c1446bf8e6094beb6139, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3562155097917563866, guid: 9c387fdd0141c1446bf8e6094beb6139, type: 3}
       propertyPath: m_RootOrder
       value: 7
