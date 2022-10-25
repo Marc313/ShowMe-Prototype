@@ -21,7 +21,7 @@ public class Pickup : APickupable
     {
         if (isPickedUp && carrier != null)
         {
-            transform.position = carrier.position + carrier.up * modelHeight;
+            transform.position = carrier.position + carrier.up * (halfModelHeight + ((IPickupable) carrier.GetComponent<Player>()).halfModelHeight);
         }
     }
 }

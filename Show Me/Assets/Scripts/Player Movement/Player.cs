@@ -44,7 +44,7 @@ public class Player : APickupable, IStateMachineOwner
     public override void OnPickup(Player _carrier)
     {
         carryingPlayer = _carrier;
-        transform.position = _carrier.transform.position + Vector3.up * 2f;
+        //transform.position = _carrier.transform.position + Vector3.up * 2f;
         walkingEnabled = false;
         moveMachine.SetState(new PickedupState());
     }

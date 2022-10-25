@@ -12,7 +12,7 @@ public abstract class MovingState : State
 
         Vector3 moveDirection = (vertical * Vector3.forward + horizontal * Vector3.right).normalized;
         Vector3 movement = moveDirection * _currentSpeed * Time.deltaTime;
-        player.transform.position = movement + player.transform.position;
+        player.transform.position += movement;
     }
 
     public virtual void HandlePickupInput(IStateMachineOwner _owner) { }

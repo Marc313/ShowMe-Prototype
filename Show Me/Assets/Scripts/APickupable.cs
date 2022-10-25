@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class APickupable : MonoBehaviour, IPickupable
 {
-    public float modelHeight { get; protected set; }
+    public float halfModelHeight => CalculateModelHeight();
 
     public virtual void OnInteract(Player _interacter)
     {
@@ -12,12 +12,13 @@ public abstract class APickupable : MonoBehaviour, IPickupable
     public virtual void OnPickup(Player _carrier) { }
     public virtual void OnRelease() { }
 
-    private void Start()
+    private float CalculateModelHeight()
     {
         MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
         if (renderer != null)
         {
-            modelHeight = renderer.bounds.extents.y;
+            return renderer.bounds.extents.y;
         }
+        else return 0;
     }
 }

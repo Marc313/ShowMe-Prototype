@@ -38,6 +38,11 @@ public class Boat : MonoBehaviour, IInteractable
         }*/
     }
 
+    public bool IsFull()
+    {
+        return embarkedPlayers.Count == 2;
+    }
+
     public void AddForce(Player _player)
     {
         if (_player == embarkedPlayers[0])
@@ -53,6 +58,20 @@ public class Boat : MonoBehaviour, IInteractable
     public void OnInteract(Player _interacter)
     {
         Enter(_interacter);
+    }
+
+    public void AddForceFromPosition(Vector3 _position, float _force, float _rotationSpeed)
+    {
+        if (!IsFull()) return;
+        Vector3 dirVector = (_position - transform.position).normalized;
+        Vector3 forceVector = dirVector * _force * Time.fixedDeltaTime;
+        rigidBody.AddForce(forceVector);
+        RotateTowards(dirVector, _rotationSpeed);
+    }
+
+    private void RotateTowards(Vector3 _dirVector, float _rotationSpeed)
+    {
+        transform.forward = Vector3.RotateTowards(transform.forward, _dirVector, _rotationSpeed/100 * Time.fixedDeltaTime, 0.0f);
     }
 
     private void Enter(Player _player)
@@ -71,22 +90,22 @@ public class Boat : MonoBehaviour, IInteractable
         FindObjectOfType<CameraScript>().EnableUnfixedZoom();
     }
 
-    public void AddLeftForce()
+    private void AddLeftForce()
     {
         AddBoatForce(Direction.LEFT);
     }
-
-    public void AddRightForce()
+    
+    private void AddRightForce()
     {
         AddBoatForce(Direction.RIGHT);
     }
 
     private void AddBoatForce(Direction _direction)
     {
-        if (rigidBody == null) return;
+        if (rigidBody == null || !IsFull()) return;
 
         Vector3 dirVector = ((int)_direction * transform.right + transform.forward).normalized;
-        Vector3 forceVector = dirVector * rowingForce;
+        Vector3 forceVector = dirVector * rowingForce * Time.deltaTime;
         rigidBody.AddForce(forceVector);
         rigidBody.AddTorque(transform.up * (int) _direction * rotationSpeed);
     }
