@@ -7,6 +7,7 @@ public class Player : APickupable, IStateMachineOwner
 
     public ScratchPad sharedData { get; } = new ScratchPad();
     [HideInInspector] public Player carryingPlayer;
+    [HideInInspector] public Rigidbody rigidBody;
     [HideInInspector] public Boat boat;
 
     [SerializeField] private float speed = 15f;
@@ -14,6 +15,7 @@ public class Player : APickupable, IStateMachineOwner
     [SerializeField] private float carryingPlayerSpeed = 30f;
     [SerializeField] private float rotationSpeed = 15f;
     [SerializeField] private float pickupRange = 0.5f;
+    [SerializeField] private float rowingCooldownTime;
 
     private MoveStateMachine moveMachine;
     private float currentSpeed;
@@ -22,7 +24,8 @@ public class Player : APickupable, IStateMachineOwner
 
     private void Awake()
     {
-        moveMachine = new MoveStateMachine(this);
+        rigidBody = GetComponent<Rigidbody>();
+        moveMachine = GetComponent<MoveStateMachine>();
     }
 
     private void Start()
@@ -36,15 +39,18 @@ public class Player : APickupable, IStateMachineOwner
 
     private void Update()
     {
-        HandleMovement();
         HandlePickupInput();
         HandleRowingInput();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMovement();
     }
 
     public override void OnPickup(Player _carrier)
     {
         carryingPlayer = _carrier;
-        //transform.position = _carrier.transform.position + Vector3.up * 2f;
         walkingEnabled = false;
         moveMachine.SetState(new PickedupState());
     }
@@ -103,7 +109,7 @@ public class Player : APickupable, IStateMachineOwner
             else if (target is Boat)
             {
                 target.OnInteract(this);
-                moveMachine.SetState(new RowingState());
+                moveMachine.SetState(new RowingState(rowingCooldownTime));
             }
             else
             {

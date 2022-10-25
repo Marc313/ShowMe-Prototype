@@ -79,7 +79,7 @@ public class Boat : MonoBehaviour, IInteractable
         embarkedPlayers.Add(_player);
         _player.boat = this;
 
-        FindObjectOfType<CameraScript>().SetZoom(13);
+        FindObjectOfType<CameraScript>().SetZoom(15);
     }
 
     private void Exit(Player _player)

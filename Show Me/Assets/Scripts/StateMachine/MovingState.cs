@@ -11,8 +11,8 @@ public abstract class MovingState : State
         float horizontal = player.controls.GetHorizontal();
 
         Vector3 moveDirection = (vertical * Vector3.forward + horizontal * Vector3.right).normalized;
-        Vector3 movement = moveDirection * _currentSpeed * Time.deltaTime;
-        player.transform.position += movement;
+        Vector3 movement = moveDirection * _currentSpeed * Time.fixedDeltaTime;
+        player.rigidBody.position += movement;
     }
 
     public virtual void HandlePickupInput(IStateMachineOwner _owner) { }

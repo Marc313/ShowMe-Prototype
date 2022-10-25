@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class MoveStateMachine : AbstractFSM
 {
-    // Refactor for all entities
+    private void Awake()
+    {
+        owner = GetComponent<IStateMachineOwner>();
+        currentState = new DefaultMoveState();
+    }
+
     public MoveStateMachine(IStateMachineOwner _owner) : base(_owner)
     {
         currentState = new DefaultMoveState();
