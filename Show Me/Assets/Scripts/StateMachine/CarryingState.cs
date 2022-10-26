@@ -29,7 +29,7 @@ public class CarryingState : MovingState
         ((MonoBehaviour) pickupable).transform.position = ((MonoBehaviour) _owner).transform.position + yOffset;
     }
 
-    public override void HandlePickupInput(IStateMachineOwner _owner)
+    public override void HandleInteractInput(IStateMachineOwner _owner)
     {
         Player player = (Player)_owner;
         player.FreeTarget();

@@ -14,7 +14,7 @@ public class PickedupState : MovingState
         player.EnableMovement();
     }
 
-    public override void HandlePickupInput(IStateMachineOwner _owner)
+    public override void HandleInteractInput(IStateMachineOwner _owner)
     {
         Player player = (Player) _owner;
         player.FreeSelf(player.carryingPlayer);

@@ -16,9 +16,9 @@ public class Player : APickupable, IStateMachineOwner
     [SerializeField] private float pickupRange = 0.5f;
     [SerializeField] private float rowingCooldownTime = 0.5f;
 
-    private MoveStateMachine moveMachine;
-    private float currentSpeed;
+    public MoveStateMachine moveMachine;
     public bool walkingEnabled;
+    private float currentSpeed;
     private IPickupable pickedUpTarget;
 
     private void Awake()
@@ -39,7 +39,7 @@ public class Player : APickupable, IStateMachineOwner
     private void Update()
     {
         HandleMovement();
-        HandlePickupInput();
+        HandleInteractInput();
         HandleRowingInput();
     }
 
@@ -117,17 +117,6 @@ public class Player : APickupable, IStateMachineOwner
         }
     }
 
-    private void PickupTarget(IPickupable _target)
-    {
-        if (_target != null)
-        {
-            pickedUpTarget = _target;
-            sharedData.Register("pickedUp", pickedUpTarget);
-            moveMachine.SetState(new CarryingState());
-            _target.OnPickup(this);
-        }
-    }
-
     public void FreeTarget()
     {
         MonoBehaviour target = (MonoBehaviour)pickedUpTarget;
@@ -145,16 +134,27 @@ public class Player : APickupable, IStateMachineOwner
         _otherPlayer.FreeTarget();
     }
 
+    private void PickupTarget(IPickupable _target)
+    {
+        if (_target != null)
+        {
+            pickedUpTarget = _target;
+            sharedData.Register("pickedUp", pickedUpTarget);
+            moveMachine.SetState(new CarryingState());
+            _target.OnPickup(this);
+        }
+    }
+
     private void HandleMovement()
     {
         moveMachine.GetState().HandleMovement(this, currentSpeed);
     }
 
-    private void HandlePickupInput()
+    private void HandleInteractInput()
     {
         if (controls.InteractKeyPressed())
         {
-            moveMachine.GetState().HandlePickupInput(this);
+            moveMachine.GetState().HandleInteractInput(this);
         }
     }
 

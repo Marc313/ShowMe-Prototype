@@ -36,7 +36,7 @@ public class RowingState : MovingState
         if (timer > 0) return;
         Player player = _owner as Player;
 
-        player.boat.AddForce(player);
+        player.boat.AddRowForce(player);
         ApplyCooldown();
     }
 
@@ -48,6 +48,31 @@ public class RowingState : MovingState
         {
             player.boat.SwitchSide(player, horizontal);
         }
+    }
+
+    public override void HandleInteractInput(IStateMachineOwner _owner)
+    {
+        Player player = _owner as Player;
+
+        Collider[] colliders = Physics.OverlapSphere(player.transform.position, 5f);
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                player.boat.OnInteract(player);
+                player.moveMachine.SetState(new DefaultMoveState());
+                Vector3 distance = collider.transform.position - player.transform.position;
+                distance.y = player.transform.position.y;
+                Vector3 landDir = distance.normalized;
+                Vector3 playerLandingPos = landDir * 5f;
+                player.transform.position += playerLandingPos;
+
+                return;
+            }
+        }
+
+        Debug.Log("No Ground Found!");
     }
 
     private void ApplyCooldown()
