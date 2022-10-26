@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class RowingState : MovingState
 {
+    public Boat.BoatDirection boatSide;
     public float rowingCooldown = 0.5f;
     private float timer = 0;
 
@@ -37,6 +38,16 @@ public class RowingState : MovingState
 
         player.boat.AddForce(player);
         ApplyCooldown();
+    }
+
+    public override void HandleMovement(IStateMachineOwner _owner, float _currentSpeed)
+    {
+        Player player = _owner as Player;
+        int horizontal = player.controls.GetHorizontalPressed();
+        if (horizontal != 0/* && horizontal != (int)boatSide*/)
+        {
+            player.boat.SwitchSide(player, horizontal);
+        }
     }
 
     private void ApplyCooldown()

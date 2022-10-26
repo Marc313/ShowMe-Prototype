@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Player : APickupable, IStateMachineOwner
@@ -15,11 +14,11 @@ public class Player : APickupable, IStateMachineOwner
     [SerializeField] private float carryingPlayerSpeed = 30f;
     [SerializeField] private float rotationSpeed = 15f;
     [SerializeField] private float pickupRange = 0.5f;
-    [SerializeField] private float rowingCooldownTime;
+    [SerializeField] private float rowingCooldownTime = 0.5f;
 
     private MoveStateMachine moveMachine;
     private float currentSpeed;
-    private bool walkingEnabled;
+    public bool walkingEnabled;
     private IPickupable pickedUpTarget;
 
     private void Awake()
@@ -39,13 +38,13 @@ public class Player : APickupable, IStateMachineOwner
 
     private void Update()
     {
+        HandleMovement();
         HandlePickupInput();
         HandleRowingInput();
     }
 
     private void FixedUpdate()
     {
-        HandleMovement();
     }
 
     public override void OnPickup(Player _carrier)
@@ -148,10 +147,7 @@ public class Player : APickupable, IStateMachineOwner
 
     private void HandleMovement()
     {
-        if (walkingEnabled)
-        {
-            moveMachine.GetState().HandleMovement(this, currentSpeed);
-        }
+        moveMachine.GetState().HandleMovement(this, currentSpeed);
     }
 
     private void HandlePickupInput()

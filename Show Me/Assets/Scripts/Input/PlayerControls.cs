@@ -29,6 +29,22 @@ public class PlayerControls : ScriptableObject, IInputHandler
         return horizontal;
     }
 
+    public int GetVerticalPressed()
+    {
+        int vertical = 0;
+        if (Input.GetKeyDown(upKey)) vertical++;
+        if (Input.GetKeyDown(downKey)) vertical--;
+        return vertical;
+    }
+
+    public int GetHorizontalPressed()
+    {
+        int horizontal = 0;
+        if (Input.GetKeyDown(rightKey)) horizontal++;
+        if (Input.GetKeyDown(leftKey)) horizontal--;
+        return horizontal;
+    }
+
     public bool InteractKeyPressed()
     {
         return Input.GetKeyDown(interactKey);
