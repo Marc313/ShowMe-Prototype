@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,15 +14,28 @@ public class CameraScript : MonoBehaviour
     [SerializeField] private float playerCarryZoom = 9f;
 
     [SerializeField] private Transform[] targets;
-    private float targetZPos;
+    private Vector3 targetXZPos;
     private float targetZoom;
     private float cameraProjectionOffsetZ;
 
     private bool fixedZoom;
+    private bool xFollow;
 
     private void Awake()
     {
         cam = GetComponent<Camera>();
+    }
+
+    private void OnEnable()
+    {
+        EventSystem.Subscribe(EventName.BOAT_READY, SetZoom);
+        EventSystem.Subscribe(EventName.BOAT_EXIT, EnableUnfixedZoom);
+    }
+
+    private void OnDisable()
+    {
+        EventSystem.Unsubscribe(EventName.BOAT_READY, SetZoom);
+        EventSystem.Unsubscribe(EventName.BOAT_EXIT, EnableUnfixedZoom);
     }
 
     private void Start()
@@ -34,13 +48,13 @@ public class CameraScript : MonoBehaviour
         }
     }
 
-    public void SetZoom(float _zoom)
+    public void SetZoom(EventName _event, object _zoomValue)
     {
         fixedZoom = true;
-        cam.orthographicSize = _zoom;
+        cam.orthographicSize = (float) _zoomValue;
     }
 
-    public void EnableUnfixedZoom()
+    private void EnableUnfixedZoom(EventName _event, object _value)
     {
         fixedZoom = false;
     }
@@ -53,8 +67,16 @@ public class CameraScript : MonoBehaviour
 
     private void HandleCameraMovement()
     {
-        targetZPos = CalculateCameraZPos();
-        cam.transform.position = new Vector3(transform.position.x, transform.position.y, targetZPos);
+        if (xFollow)
+        {
+            targetXZPos = CalculateCameraXZPos();
+            cam.transform.position = new Vector3(targetXZPos.x, transform.position.y, targetXZPos.z);
+        }
+        else
+        {
+            float targetZPos = CalculateCameraZPos();
+            cam.transform.position = new Vector3(transform.position.x, transform.position.y, targetZPos);
+        }
     }
 
     private void HandleCameraZoom()
@@ -73,6 +95,19 @@ public class CameraScript : MonoBehaviour
         float averageZ = totalZ / targets.Length;
         float cameraZPos = averageZ - cameraProjectionOffsetZ;
         return cameraZPos;
+    }
+
+    private Vector3 CalculateCameraXZPos()
+    {
+        Vector3 totalXZ = Vector3.zero;
+        foreach (Transform target in targets)
+        {
+            totalXZ += target.transform.position.x * Vector3.right;
+            totalXZ += target.transform.position.z * Vector3.forward;
+        }
+        Vector3 averageXZ = totalXZ / targets.Length;
+        Vector3 cameraXZPos = new Vector3(averageXZ.x, 0, averageXZ.z - cameraProjectionOffsetZ);
+        return cameraXZPos;
     }
 
     private float CalculateCameraSize()

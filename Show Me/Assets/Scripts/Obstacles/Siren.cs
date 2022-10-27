@@ -5,6 +5,7 @@ using UnityEngine;
 public class Siren : MonoBehaviour
 {
     [SerializeField] private float singingRange = 10f;
+    [SerializeField] private float deadRange = 3f;
     [SerializeField] private float attractionForce = 100f;
     [SerializeField] private float rotationSpeed = 10f;
 
@@ -24,7 +25,12 @@ public class Siren : MonoBehaviour
             if (boat != null)
             {
                 boat.AddForceFromPosition(transform.position, attractionForce, rotationSpeed);
-                Debug.Log("SIREN");
+
+                float boatDistance = Vector3.Distance(transform.position, boat.transform.position);
+                if (boatDistance <= deadRange)
+                {
+                    EventSystem.RaiseEvent(EventName.PLAYER_KILLED);
+                }
             }
         }
     }

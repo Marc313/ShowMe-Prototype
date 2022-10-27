@@ -8,6 +8,7 @@ public class Boat : MonoBehaviour, IInteractable
 
     [SerializeField] private float rowingForce = 200f;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private float boatZoom = 14f;
     [SerializeField] private List<Transform> playerSpots = new List<Transform>();
 
     [SerializeField] private Transform FrontLeftSpots;
@@ -138,7 +139,10 @@ public class Boat : MonoBehaviour, IInteractable
         embarkedPlayers.Add(_player);
         _player.boat = this;
 
-        if (IsFull()) FindObjectOfType<CameraScript>().SetZoom(15);
+        if (IsFull())
+        {
+            EventSystem.RaiseEvent(EventName.BOAT_READY, boatZoom);
+        }
     }
 
     private void Exit(Player _player)
@@ -147,7 +151,7 @@ public class Boat : MonoBehaviour, IInteractable
         playerSpotsDic.Remove(_player);
         _player.boat = null;
 
-        FindObjectOfType<CameraScript>().EnableUnfixedZoom();
+        EventSystem.RaiseEvent(EventName.BOAT_EXIT);
     }
 
     private void AddBoatForce(BoatDirection _direction)

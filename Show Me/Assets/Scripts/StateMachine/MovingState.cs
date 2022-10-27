@@ -10,11 +10,9 @@ public abstract class MovingState : State
         float vertical = player.controls.GetVertical();
         float horizontal = player.controls.GetHorizontal();
 
-        if (vertical == 0 && horizontal == 0) return;
-
         Vector3 moveDirection = (vertical * Vector3.forward + horizontal * Vector3.right).normalized;
-        Vector3 movement = moveDirection * _currentSpeed * Time.deltaTime;
-        player.rigidBody.position += movement;
+        Vector3 movement = moveDirection * _currentSpeed * Time.fixedDeltaTime;
+        player.rigidBody.velocity = movement;   // Setting velocity had the best collision results
     }
 
     public virtual void HandleInteractInput(IStateMachineOwner _owner) { }

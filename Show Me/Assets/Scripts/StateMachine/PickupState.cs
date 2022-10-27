@@ -14,6 +14,10 @@ public class PickedupState : MovingState
         player.EnableMovement();
     }
 
+    public override void HandleMovement(IStateMachineOwner _owner, float _currentSpeed)
+    {
+    }
+
     public override void HandleInteractInput(IStateMachineOwner _owner)
     {
         Player player = (Player) _owner;

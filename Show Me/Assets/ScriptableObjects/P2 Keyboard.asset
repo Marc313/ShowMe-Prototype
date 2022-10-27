@@ -16,5 +16,5 @@ MonoBehaviour:
   downKey: 274
   rightKey: 275
   leftKey: 276
-  interactKey: 256
-  rowingKey: 257
+  interactKey: 13
+  rowingKey: 303

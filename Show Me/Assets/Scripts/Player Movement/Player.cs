@@ -18,6 +18,7 @@ public class Player : APickupable, IStateMachineOwner
 
     public MoveStateMachine moveMachine;
     public bool walkingEnabled;
+    public Vector3 targetPos;
     private float currentSpeed;
     private IPickupable pickedUpTarget;
 
@@ -29,6 +30,7 @@ public class Player : APickupable, IStateMachineOwner
 
     private void Start()
     {
+        targetPos = transform.position;
         walkingEnabled = true;
         currentSpeed = speed;
         sharedData.Register("defaultSpeed", speed);
@@ -39,6 +41,7 @@ public class Player : APickupable, IStateMachineOwner
     private void Update()
     {
         HandleMovement();
+
         HandleInteractInput();
         HandleRowingInput();
     }
@@ -98,6 +101,8 @@ public class Player : APickupable, IStateMachineOwner
                     }
                 }
             }
+
+            Debug.Log(target);
 
             if (target == null) return;
 
