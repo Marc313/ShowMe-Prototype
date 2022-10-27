@@ -1,71 +1,63 @@
-using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
+public class Player : APickupable, IStateMachineOwner
 {
-    public ScratchPad sharedData { get; } = new ScratchPad();
-    public float modelHeight { get; private set; }
+    public PlayerControls controls;
 
-    [SerializeField] public DirectionControls controls;
-    [SerializeField] public KeyCode interactKey = KeyCode.E;
-    [SerializeField] public KeyCode rowingKey = KeyCode.Q;
+    public ScratchPad sharedData { get; } = new ScratchPad();
+    [HideInInspector] public Player carryingPlayer;
+    [HideInInspector] public Rigidbody rigidBody;
+    [HideInInspector] public Boat boat;
+
     [SerializeField] private float speed = 15f;
     [SerializeField] private float carryingObjectSpeed = 10f;
     [SerializeField] private float carryingPlayerSpeed = 30f;
     [SerializeField] private float rotationSpeed = 15f;
     [SerializeField] private float pickupRange = 0.5f;
+    [SerializeField] private float rowingCooldownTime = 0.5f;
 
-    public Player carryingPlayer;
-
-    public Boat boat;
-    //private Transform boatSpot;
-
-    private MoveStateMachine moveMachine;
+    public MoveStateMachine moveMachine;
+    public bool walkingEnabled;
+    public Vector3 targetPos;
     private float currentSpeed;
-    private bool walkingEnabled;
     private IPickupable pickedUpTarget;
 
     private void Awake()
     {
-        moveMachine = new MoveStateMachine(this);
+        rigidBody = GetComponent<Rigidbody>();
+        moveMachine = GetComponent<MoveStateMachine>();
     }
 
     private void Start()
     {
+        targetPos = transform.position;
         walkingEnabled = true;
         currentSpeed = speed;
         sharedData.Register("defaultSpeed", speed);
         sharedData.Register("carryingSpeed", carryingObjectSpeed);
         sharedData.Register("carryingPlayerSpeed", carryingPlayerSpeed);
-
-        MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
-        if (renderer != null)
-        {
-            modelHeight = renderer.bounds.extents.y;
-        }
     }
 
     private void Update()
     {
         HandleMovement();
-        HandlePickupInput();
+
+        HandleInteractInput();
         HandleRowingInput();
     }
 
-    public void OnInteract(Player _interacter)
+    private void FixedUpdate()
     {
-        OnPickup(_interacter);
     }
 
-    public void OnPickup(Player _carrier)
+    public override void OnPickup(Player _carrier)
     {
         carryingPlayer = _carrier;
-        transform.position = _carrier.transform.position + Vector3.up * 2f;
         walkingEnabled = false;
         moveMachine.SetState(new PickedupState());
     }
 
-    public void OnRelease()
+    public override void OnRelease()
     {
         carryingPlayer = null;
         moveMachine.SetState(new DefaultMoveState());
@@ -88,7 +80,7 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
 
     public void OverlapInteract()
     {
-        if (Input.GetKeyDown(interactKey))
+        if (controls.InteractKeyPressed())
         {
             // Look for closest target
             IInteractable target = null;
@@ -110,6 +102,8 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
                 }
             }
 
+            Debug.Log(target);
+
             if (target == null) return;
 
             if (target is IPickupable)
@@ -119,23 +113,12 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
             else if (target is Boat)
             {
                 target.OnInteract(this);
-                moveMachine.SetState(new RowingState());
+                moveMachine.SetState(new RowingState(rowingCooldownTime));
             }
             else
             {
                 target.OnInteract(this);
             }
-        }
-    }
-
-    private void PickupTarget(IPickupable _target)
-    {
-        if (_target != null)
-        {
-            pickedUpTarget = _target;
-            sharedData.Register("pickedUp", pickedUpTarget);
-            moveMachine.SetState(new CarryingState());
-            _target.OnPickup(this);
         }
     }
 
@@ -156,25 +139,33 @@ public class Player : MonoBehaviour, IPickupable, IStateMachineOwner
         _otherPlayer.FreeTarget();
     }
 
-    private void HandleMovement()
+    private void PickupTarget(IPickupable _target)
     {
-        if (walkingEnabled)
+        if (_target != null)
         {
-            moveMachine.GetState().HandleMovement(this, currentSpeed);
+            pickedUpTarget = _target;
+            sharedData.Register("pickedUp", pickedUpTarget);
+            moveMachine.SetState(new CarryingState());
+            _target.OnPickup(this);
         }
     }
 
-    private void HandlePickupInput()
+    private void HandleMovement()
     {
-        if (Input.GetKeyDown(interactKey))
+        moveMachine.GetState().HandleMovement(this, currentSpeed);
+    }
+
+    private void HandleInteractInput()
+    {
+        if (controls.InteractKeyPressed())
         {
-            moveMachine.GetState().HandlePickupInput(this);
+            moveMachine.GetState().HandleInteractInput(this);
         }
     }
 
     private void HandleRowingInput()
     {
-        if (Input.GetKeyDown(rowingKey))
+        if (controls.RowKeyPressed())
         {
             if (boat == null) return;
 

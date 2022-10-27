@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minCameraSize: 7
-  maxCameraSize: 13
+  maxCameraSize: 14
   minZoomDistance: 5
-  maxZoomDistance: 15
+  maxZoomDistance: 20
   playerCarryZoom: 9
   targets:
   - {fileID: 0}

@@ -10,7 +10,7 @@ public class DefaultMoveState : MovingState
         player.SetSpeed(speed);
     }
 
-    public override void HandlePickupInput(IStateMachineOwner _owner)
+    public override void HandleInteractInput(IStateMachineOwner _owner)
     {
         Player player = _owner as Player;
         player.OverlapInteract();

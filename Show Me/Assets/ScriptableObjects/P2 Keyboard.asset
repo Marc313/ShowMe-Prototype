@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0573bfcadf47d4c43a343e306e1dc2cd, type: 3}
-  m_Name: Pijltoetsen
+  m_Name: P2 Keyboard
   m_EditorClassIdentifier: 
   upKey: 273
   downKey: 274
   rightKey: 275
   leftKey: 276
+  interactKey: 13
+  rowingKey: 303

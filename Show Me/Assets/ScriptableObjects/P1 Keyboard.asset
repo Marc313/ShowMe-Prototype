@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0573bfcadf47d4c43a343e306e1dc2cd, type: 3}
-  m_Name: WASD
+  m_Name: P1 Keyboard
   m_EditorClassIdentifier: 
   upKey: 119
   downKey: 115
   rightKey: 100
   leftKey: 97
+  interactKey: 101
+  rowingKey: 113

@@ -25,11 +25,11 @@ public class CarryingState : MovingState
         base.HandleMovement(_owner, _currentSpeed);
 
         IPickupable pickupable = (IPickupable)_owner.sharedData.Get("pickedUp");
-        Vector3 yOffset = Vector3.up * (pickupable.modelHeight + ((IPickupable)_owner).modelHeight);
+        Vector3 yOffset = Vector3.up * (pickupable.halfModelHeight + ((IPickupable)_owner).halfModelHeight);
         ((MonoBehaviour) pickupable).transform.position = ((MonoBehaviour) _owner).transform.position + yOffset;
     }
 
-    public override void HandlePickupInput(IStateMachineOwner _owner)
+    public override void HandleInteractInput(IStateMachineOwner _owner)
     {
         Player player = (Player)_owner;
         player.FreeTarget();
