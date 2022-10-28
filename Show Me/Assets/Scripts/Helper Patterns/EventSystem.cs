@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public enum EventName
 {
     PLAYER_KILLED,
     BOAT_READY,
-    BOAT_EXIT
+    BOAT_EXIT,
+    LEVEL_END
 }
 
 public delegate void EventCallback(EventName _event, object _value);

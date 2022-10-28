@@ -27,11 +27,11 @@ public class Siren : MonoBehaviour
                 transform.LookAt(boat.transform.position);
                 boat.AddForceFromPosition(transform.position, attractionForce, rotationSpeed);
 
-                float boatDistance = Vector3.Distance(transform.position, boat.transform.position);
+                /*float boatDistance = Vector3.Distance(transform.position, boat.transform.position);
                 if (boatDistance <= deadRange)
                 {
                     EventSystem.RaiseEvent(EventName.PLAYER_KILLED);
-                }
+                }*/
             }
         }
     }

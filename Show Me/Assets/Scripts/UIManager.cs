@@ -1,41 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public InputAction pauseButton;
     public GameObject PauseMenu;
-    public GameObject RespawnScreen;
+    public GameObject EndScreen;
 
     public Text RespawnText;
+    public Text timerText;
+
+    private Timer timer = new Timer();
 
     private bool isPaused;
 
+    private void Awake()
+    {
+        pauseButton.performed += context => PauseSwitch();
+    }
+
     private void OnEnable()
     {
-        EventSystem.Subscribe(EventName.PLAYER_KILLED, ShowRespawnScreen);
+        pauseButton.Enable();
+        EventSystem.Subscribe(EventName.BOAT_READY, (name, value) => timer.Start());
+        EventSystem.Subscribe(EventName.LEVEL_END, (name, value) => ShowEndScreen(name, value));
     }
 
     private void OnDisable()
     {
-        EventSystem.Unsubscribe(EventName.PLAYER_KILLED, ShowRespawnScreen);
+        pauseButton.Disable();
+        EventSystem.Unsubscribe(EventName.BOAT_READY, (name, value) => timer.Start());
+        EventSystem.Unsubscribe(EventName.LEVEL_END, (name, value) => ShowEndScreen(name, value));
     }
 
     private void Start()
     {
         PauseMenu.SetActive(false);
-        RespawnScreen.SetActive(false);
+        EndScreen.SetActive(false);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (!isPaused) ShowPauseScreen();
-            else HidePauseScreen();
-        }
+        timer.Tick();
+        timerText.text = timer.TimeToString();
+    }
+
+    private void PauseSwitch()
+    {
+        if (!isPaused) ShowPauseScreen();
+        else HidePauseScreen();
+
+        isPaused = !isPaused;
     }
 
     // For build
@@ -60,10 +79,10 @@ public class UIManager : MonoBehaviour
         PauseMenu.SetActive(false);
     }
 
-    private void ShowRespawnScreen(EventName _name, object _value = null)
+    private void ShowEndScreen(EventName _name, object _value = null)
     {
-        RespawnScreen.SetActive(true);
-        RespawnText.text = "You got caught by a Siren! Respawning...";
-        Invoke(nameof(Restart), 3f);
+        EndScreen.SetActive(true);
+        RespawnText.text = $"Total Time: {timer.TimeToString()}";
+        timerText.gameObject.SetActive(false);
     }
 }
