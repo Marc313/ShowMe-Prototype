@@ -6,6 +6,7 @@ public class Boat : MonoBehaviour, IInteractable
 {
     public enum BoatDirection { LEFT = -1, RIGHT = 1}
 
+    [SerializeField] private float constantBoatForce = 10f;
     [SerializeField] private float rowingForce = 200f;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float boatZoom = 14f;
@@ -49,9 +50,14 @@ public class Boat : MonoBehaviour, IInteractable
             BackRightSpots
         };
     }
-
+    
     private void Update()
     {
+        if (IsFull())
+        {
+            rigidBody.AddForce(transform.forward * constantBoatForce * Time.deltaTime);
+        }
+
         foreach (Player player in playerSpotsDic.Keys)
         {
             int index = playerSpotsDic[player];
