@@ -133,7 +133,8 @@ public class Boat : MonoBehaviour, IInteractable
     {
         if (embarkedPlayers.Count == 0)
         {
-            playerSpotsDic.Add(_player, 0);
+            int leftSpot = _player.playerType == PlayerType.Player1 ? 0 : 2;
+            playerSpotsDic.Add(_player, leftSpot);
         }
         else if (embarkedPlayers.Count == 1)
         {
@@ -142,6 +143,7 @@ public class Boat : MonoBehaviour, IInteractable
             playerSpotsDic.Add(_player, oppositeSpotIndex);
         }
 
+        int index = (int)_player.playerType;
         embarkedPlayers.Add(_player);
         _player.boat = this;
 

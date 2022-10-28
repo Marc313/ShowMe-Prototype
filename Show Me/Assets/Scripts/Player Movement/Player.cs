@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : APickupable, IStateMachineOwner
 {
     public PlayerControls controls;
+    public PlayerType playerType;
 
     public ScratchPad sharedData { get; } = new ScratchPad();
     [HideInInspector] public Player carryingPlayer;
@@ -47,10 +48,6 @@ public class Player : APickupable, IStateMachineOwner
         HandleMovement();
     }
 
-    private void FixedUpdate()
-    {
-    }
-
     public override void OnPickup(Player _carrier)
     {
         carryingPlayer = _carrier;
@@ -79,7 +76,52 @@ public class Player : APickupable, IStateMachineOwner
         walkingEnabled = false;
     }
 
-    public void OverlapInteract()
+    public void OverlapInteractBoatPriority()
+    {
+        // Look for closest target
+        IInteractable target = null;
+        float closestDistance = float.MaxValue;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, pickupRange);
+
+        // Look for the closest IInteractable
+        foreach (Collider collider in colliders)
+        {
+            IInteractable interactable = collider.GetComponent<IInteractable>();
+            if (interactable is Boat)
+            {
+                target = interactable;
+                break;
+            }
+
+            if (interactable != null && interactable != (IInteractable)this)
+            {
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    target = interactable;
+                }
+            }
+        }
+
+        if (target == null) return;
+
+        if (target is Boat)
+        {
+            target.OnInteract(this);
+            moveMachine.SetState(new RowingState(rowingCooldownTime));
+        }
+        else if (target is IPickupable)
+        {
+            PickupTarget((IPickupable)target);
+        }
+        else
+        {
+            target.OnInteract(this);
+        }
+    }
+
+    public void OverlapInteractClosest()
     {
         //if (controls.InteractKeyPressed())
         {
@@ -103,18 +145,16 @@ public class Player : APickupable, IStateMachineOwner
                 }
             }
 
-            //Debug.Log(target);
-
             if (target == null) return;
 
-            if (target is IPickupable)
-            {
-                PickupTarget((IPickupable) target);
-            }
-            else if (target is Boat)
+            if (target is Boat)
             {
                 target.OnInteract(this);
                 moveMachine.SetState(new RowingState(rowingCooldownTime));
+            }
+            else if (target is IPickupable)
+            {
+                PickupTarget((IPickupable) target);
             }
             else
             {

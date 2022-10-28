@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
+public enum PlayerType { Player1, Player2 }
+
 [CreateAssetMenu(menuName = "Input/Player Controls")]
 public class PlayerControls : ScriptableObject, IInputHandler
 {
-    public enum controlType { Player1, Player2 }
-    public controlType type;
+    public PlayerType type;
     private Controls controls;
 
     public float Horizontal { get; private set; }
@@ -29,14 +30,14 @@ public class PlayerControls : ScriptableObject, IInputHandler
     {
         controls = new Controls();
 
-        if (type == controlType.Player1)
+        if (type == PlayerType.Player1)
         {
             controls.Player1.Movement.performed += context => OnMove(context);
             controls.Player1.Movement.canceled += context => OnMoveStop();
             controls.Player1.InteractButton.performed += context => InteractPressed?.Invoke();
             controls.Player1.RowingButton.performed += context => RowingPressed?.Invoke();
         }
-        else if (type == controlType.Player2)
+        else if (type == PlayerType.Player2)
         {
             controls.Player2.Movement.performed += context => OnMove(context);
             controls.Player2.Movement.canceled += context => OnMoveStop();
