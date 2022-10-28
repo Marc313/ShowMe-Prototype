@@ -59,9 +59,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c3ea9928f11124faf9c0c233c284d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  singingRange: 25
+  singingRange: 15
   deadRange: 4
-  attractionForce: 75
+  attractionForce: 50
   rotationSpeed: 0.3
 --- !u!1001 &1929651082760439239
 PrefabInstance:
