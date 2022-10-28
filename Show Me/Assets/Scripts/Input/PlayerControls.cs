@@ -1,19 +1,85 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 [CreateAssetMenu(menuName = "Input/Player Controls")]
 public class PlayerControls : ScriptableObject, IInputHandler
 {
-    [Header("Directions")]
-    public KeyCode upKey;
-    public KeyCode downKey;
-    public KeyCode rightKey;
-    public KeyCode leftKey;
+    public enum controlType { Player1, Player2 }
+    public controlType type;
+    private Controls controls;
 
-    [Header("Actions")]
-    public KeyCode interactKey = KeyCode.E;
-    public KeyCode rowingKey = KeyCode.Q;
+    public float Horizontal { get; private set; }
+    public float Vertical { get; private set; }
 
-    public int GetVertical()
+    public int HorizontalRaw
+    {
+        get
+        {
+            if (Horizontal > .01f) return 1;
+            else if (Horizontal < -0.01f) return -1;
+            return 0;
+        }
+    }
+    public event Action RowingPressed;
+    public event Action InteractPressed;
+
+    public void Awake()
+    {
+        controls = new Controls();
+
+        if (type == controlType.Player1)
+        {
+            controls.Player1.Movement.performed += context => OnMove(context);
+            controls.Player1.Movement.canceled += context => OnMoveStop();
+            controls.Player1.InteractButton.performed += context => InteractPressed?.Invoke();
+            controls.Player1.RowingButton.performed += context => RowingPressed?.Invoke();
+        }
+        else if (type == controlType.Player2)
+        {
+            controls.Player2.Movement.performed += context => OnMove(context);
+            controls.Player2.Movement.canceled += context => OnMoveStop();
+            controls.Player2.InteractButton.performed += context => InteractPressed?.Invoke();
+            controls.Player2.RowingButton.performed += context => RowingPressed?.Invoke();
+        }
+    }
+
+  
+
+    private void OnEnable()
+    {
+        if (controls == null) Awake();
+        controls.Enable();
+
+        RowingPressed = null;
+        InteractPressed = null;
+    }
+
+    private void OnDisable()
+    {
+        if (controls == null) Awake();
+        controls.Disable();
+    }
+
+    public void OnMove(CallbackContext context)
+    {
+        Vector2 moveDirection = context.ReadValue<Vector2>();
+        Horizontal = moveDirection.x;
+        Vertical = moveDirection.y;
+        /*if (Horizontal > 0 && context.action.WasPerformedThisFrame())
+        {
+            HorizontalPressed?.Invoke();
+        }*/
+    }
+
+    private void OnMoveStop()
+    {
+        Horizontal = 0;
+        Vertical = 0;
+    }
+
+    /*public int GetVertical()
     {
         int vertical = 0;
         if (Input.GetKey(upKey)) vertical++;
@@ -43,16 +109,16 @@ public class PlayerControls : ScriptableObject, IInputHandler
         if (Input.GetKeyDown(rightKey)) horizontal++;
         if (Input.GetKeyDown(leftKey)) horizontal--;
         return horizontal;
-    }
+    }*/
 
-    public bool InteractKeyPressed()
+    /*public bool InteractKeyPressed()
     {
-        return Input.GetKeyDown(interactKey);
-    }
+        return Interact.IsPressed();
+    }*/
 
-    public bool RowKeyPressed()
+    /*public bool RowKeyPressed()
     {
         return Input.GetKeyDown(rowingKey);
-    }
+    }*/
 }
 

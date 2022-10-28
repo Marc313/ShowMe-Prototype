@@ -7,8 +7,10 @@ public abstract class MovingState : State
         Player player = _owner as Player;
         if (player == null || !player.walkingEnabled) return;
 
-        float vertical = player.controls.GetVertical();
-        float horizontal = player.controls.GetHorizontal();
+        float vertical = player.controls.Vertical;
+        float horizontal = player.controls.Horizontal;
+
+        Debug.Log($"Horizontal: {horizontal}, Vertical: {vertical}");
 
         Vector3 moveDirection = (vertical * Vector3.forward + horizontal * Vector3.right).normalized;
         Vector3 movement = moveDirection * _currentSpeed * Time.fixedDeltaTime;

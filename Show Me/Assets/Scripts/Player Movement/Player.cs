@@ -24,6 +24,10 @@ public class Player : APickupable, IStateMachineOwner
 
     private void Awake()
     {
+        controls.RowingPressed += () => HandleRowingInput();
+        controls.InteractPressed += () => HandleInteractInput();
+
+        controls.Awake();
         rigidBody = GetComponent<Rigidbody>();
         moveMachine = GetComponent<MoveStateMachine>();
     }
@@ -41,9 +45,6 @@ public class Player : APickupable, IStateMachineOwner
     private void Update()
     {
         HandleMovement();
-
-        HandleInteractInput();
-        HandleRowingInput();
     }
 
     private void FixedUpdate()
@@ -80,7 +81,7 @@ public class Player : APickupable, IStateMachineOwner
 
     public void OverlapInteract()
     {
-        if (controls.InteractKeyPressed())
+        //if (controls.InteractKeyPressed())
         {
             // Look for closest target
             IInteractable target = null;
@@ -102,7 +103,7 @@ public class Player : APickupable, IStateMachineOwner
                 }
             }
 
-            Debug.Log(target);
+            //Debug.Log(target);
 
             if (target == null) return;
 
@@ -157,23 +158,17 @@ public class Player : APickupable, IStateMachineOwner
 
     private void HandleInteractInput()
     {
-        if (controls.InteractKeyPressed())
-        {
-            moveMachine.GetState().HandleInteractInput(this);
-        }
+        moveMachine.GetState().HandleInteractInput(this);
     }
 
     private void HandleRowingInput()
     {
-        if (controls.RowKeyPressed())
-        {
-            if (boat == null) return;
+        if (boat == null) return;
 
-            MovingState currentState = moveMachine.GetState();
-            if (currentState.GetType() == typeof(RowingState))
-            {
-                currentState.HandleRowingInput(this);
-            }
+        MovingState currentState = moveMachine.GetState();
+        if (currentState.GetType() == typeof(RowingState))
+        {
+            currentState.HandleRowingInput(this);
         }
     }
 }

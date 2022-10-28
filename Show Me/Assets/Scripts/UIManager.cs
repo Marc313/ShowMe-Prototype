@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public InputAction pauseButton;
     public GameObject PauseMenu;
     public GameObject RespawnScreen;
 
@@ -13,13 +15,20 @@ public class UIManager : MonoBehaviour
 
     private bool isPaused;
 
+    private void Awake()
+    {
+        pauseButton.performed += context => PauseSwitch();
+    }
+
     private void OnEnable()
     {
+        pauseButton.Enable();
         EventSystem.Subscribe(EventName.PLAYER_KILLED, ShowRespawnScreen);
     }
 
     private void OnDisable()
     {
+        pauseButton.Disable();
         EventSystem.Unsubscribe(EventName.PLAYER_KILLED, ShowRespawnScreen);
     }
 
@@ -29,13 +38,12 @@ public class UIManager : MonoBehaviour
         RespawnScreen.SetActive(false);
     }
 
-    private void Update()
+    private void PauseSwitch()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (!isPaused) ShowPauseScreen();
-            else HidePauseScreen();
-        }
+        if (!isPaused) ShowPauseScreen();
+        else HidePauseScreen();
+
+        isPaused = !isPaused;
     }
 
     // For build
