@@ -24,6 +24,7 @@ public class Siren : MonoBehaviour
             Boat boat = collider.GetComponent<Boat>();
             if (boat != null)
             {
+                transform.LookAt(boat.transform.position);
                 boat.AddForceFromPosition(transform.position, attractionForce, rotationSpeed);
 
                 float boatDistance = Vector3.Distance(transform.position, boat.transform.position);
