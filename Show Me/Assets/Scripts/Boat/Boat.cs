@@ -80,11 +80,11 @@ public class Boat : MonoBehaviour, IInteractable
         // Even spot mean Left Side, Odd means Right Side
         if (spotIndex % 2 == 0)
         {
-            AddLeftForce();
+            AddRightForce();
         }
         else if (spotIndex % 2 == 1)
         {
-            AddRightForce();
+            AddLeftForce();
         }
 
         PlayPedalAnimation(spotIndex);
