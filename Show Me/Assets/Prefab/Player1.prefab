@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 8250954428052345450}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.5, y: 1.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8250954428052345450}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -5011625517228663004, guid: 0ca01d81eb2dd8f44b2640cb30ba729c, type: 3}
 --- !u!23 &8250954428052345455
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8e5b5119b78ed694baaf9053676336ae, type: 2}
+  - {fileID: 2100000, guid: 1dbdb7aa65327b4418ca69eee21a2423, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,10 +97,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.9773493
+  m_Height: 3.7499251
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0.020241737, y: 2.0780747, z: 0}
 --- !u!54 &6069848600237277306
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -116,7 +116,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 116
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &8250954428052345453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,18 +129,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c48d93279adf6449d8910bda8bab30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controls: {fileID: 11400000, guid: db750f94bf28a304d80698f10b2c98ce, type: 2}
+  controls: {fileID: 11400000, guid: 6060f0961e19c674db9a16b9373f697f, type: 2}
+  playerType: 0
   carryingPlayer: {fileID: 0}
   rigidBody: {fileID: 0}
   boat: {fileID: 0}
-  speed: 10
-  carryingObjectSpeed: 7
-  carryingPlayerSpeed: 20
+  speed: 500
+  carryingObjectSpeed: 350
+  carryingPlayerSpeed: 750
   rotationSpeed: 15
   pickupRange: 2.5
   rowingCooldownTime: 0.5
   moveMachine: {fileID: 0}
   walkingEnabled: 0
+  targetPos: {x: 0, y: 0, z: 0}
 --- !u!114 &8766400171769801358
 MonoBehaviour:
   m_ObjectHideFlags: 0
