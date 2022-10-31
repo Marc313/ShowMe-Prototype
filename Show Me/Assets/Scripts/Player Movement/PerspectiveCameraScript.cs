@@ -48,7 +48,8 @@ public class PerspectiveCameraScript : MonoBehaviour
     public void SetZoom(EventName _event, object _zoomValue)
     {
         fixedZoom = true;
-        cam.transform.position = cameraGroundHit + (float) _zoomValue * -cam.transform.forward;
+        targetZoom = (float )_zoomValue;
+        cam.transform.position = cameraGroundHit + (float) targetZoom * -cam.transform.forward;
     }
 
     private void EnableUnfixedZoom(EventName _event, object _value)
@@ -58,19 +59,17 @@ public class PerspectiveCameraScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        HandleCameraMovement();
         RecalculateGroundHit();
-        if (!fixedZoom) HandleCameraZoom();
+        HandleCameraMovement();
+        HandleCameraZoom();
     }
 
     private void RecalculateGroundHit()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, 100f, LayerMask.GetMask("Ground")))
-        {
-            cameraGroundHit = hit.point;
-            cameraProjectionOffsetZ = Mathf.Abs(cam.transform.position.z - hit.point.z);
-        }
+        Vector3 averageXZ = CalculateAverageXZ();
+        averageXZ.y = (targets[0].position.y + targets[1].position.y) / 2;
+        cameraGroundHit = averageXZ;
+        cameraProjectionOffsetZ = Mathf.Abs(cam.transform.position.z - averageXZ.z);
     }
 
     private void HandleCameraMovement()
@@ -89,7 +88,7 @@ public class PerspectiveCameraScript : MonoBehaviour
 
     private void HandleCameraZoom()
     {
-        CalculateCameraSize();
+        if (!fixedZoom) CalculateCameraSize();
         cam.transform.position = cameraGroundHit + (float)targetZoom * -cam.transform.forward;
     }
 
@@ -107,6 +106,13 @@ public class PerspectiveCameraScript : MonoBehaviour
 
     private Vector3 CalculateCameraXZPos()
     {
+        Vector3 averageXZ = CalculateAverageXZ();
+        Vector3 cameraXZPos = new Vector3(averageXZ.x, 0, averageXZ.z - cameraProjectionOffsetZ);
+        return cameraXZPos;
+    }
+
+    private Vector3 CalculateAverageXZ()
+    {
         Vector3 totalXZ = Vector3.zero;
         foreach (Transform target in targets)
         {
@@ -114,8 +120,7 @@ public class PerspectiveCameraScript : MonoBehaviour
             totalXZ += target.transform.position.z * Vector3.forward;
         }
         Vector3 averageXZ = totalXZ / targets.Length;
-        Vector3 cameraXZPos = new Vector3(averageXZ.x, 0, averageXZ.z - cameraProjectionOffsetZ);
-        return cameraXZPos;
+        return averageXZ;
     }
 
     private float CalculateCameraSize()
