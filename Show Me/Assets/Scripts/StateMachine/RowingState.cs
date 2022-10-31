@@ -54,6 +54,8 @@ public class RowingState : MovingState
     {
         Player player = _owner as Player;
 
+        if (player.boat == null) return;
+
         Collider[] colliders = Physics.OverlapSphere(player.boat.transform.position, 5f);
 
         foreach (Collider collider in colliders)

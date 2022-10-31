@@ -782,9 +782,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   constantBoatForce: 150
+  constantRotationForce: 0
   rowingForce: 10000
   rotationSpeed: 100
   boatZoom: 25
+  collisionDistance: 1
+  bounceForce: 100
   playerSpots:
   - {fileID: 3059198092337625880}
   - {fileID: 3059198092602518935}
@@ -823,8 +826,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.81153, y: 0.3180132, z: 7.1195226}
-  m_Center: {x: 0.45893717, y: -5.621042, z: 3.0597613}
+  m_Size: {x: 5.81153, y: 0.3180132, z: 6.2700367}
+  m_Center: {x: 0.45893717, y: -5.621042, z: 3.4845042}
 --- !u!1 &3059198092404813057
 GameObject:
   m_ObjectHideFlags: 0

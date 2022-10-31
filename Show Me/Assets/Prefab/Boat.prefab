@@ -451,6 +451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   constantBoatForce: 150
+  constantRotationForce: 1000
   rowingForce: 10000
   rotationSpeed: 100
   boatZoom: 14

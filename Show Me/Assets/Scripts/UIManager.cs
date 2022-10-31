@@ -60,6 +60,11 @@ public class UIManager : MonoBehaviour
     // For build
     public void Restart()
     {
+        Invoke(nameof(ReloadScene), .1f);
+    }
+
+    private void ReloadScene()
+    {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -81,6 +86,8 @@ public class UIManager : MonoBehaviour
 
     private void ShowEndScreen(EventName _name, object _value = null)
     {
+        if (EndScreen == null) EndScreen = GameObject.Find("EndMenu");
+
         EndScreen.SetActive(true);
         RespawnText.text = $"Total Time: {timer.TimeToString()}";
         timerText.gameObject.SetActive(false);

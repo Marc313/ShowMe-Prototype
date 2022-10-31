@@ -25,12 +25,22 @@ public class Player : APickupable, IStateMachineOwner
 
     private void Awake()
     {
-        controls.RowingPressed += () => HandleRowingInput();
-        controls.InteractPressed += () => HandleInteractInput();
-
-        controls.Awake();
         rigidBody = GetComponent<Rigidbody>();
         moveMachine = GetComponent<MoveStateMachine>();
+    }
+
+    private void OnEnable()
+    {
+        controls.OnEnable();
+        controls.RowingPressed += () => HandleRowingInput();
+        controls.InteractPressed += () => HandleInteractInput();
+    }
+
+    private void OnDisable()
+    {
+        controls.OnDisable();
+        controls.RowingPressed -= () => HandleRowingInput();
+        controls.InteractPressed -= () => HandleInteractInput();
     }
 
     private void Start()

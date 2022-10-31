@@ -10,9 +10,8 @@ public abstract class MovingState : State
         float vertical = player.controls.Vertical;
         float horizontal = player.controls.Horizontal;
 
-        //Debug.Log($"Horizontal: {horizontal}, Vertical: {vertical}");
-
         Vector3 moveDirection = (vertical * Vector3.forward + horizontal * Vector3.right).normalized;
+        player.transform.forward = moveDirection;
         Vector3 movement = moveDirection * _currentSpeed * Time.fixedDeltaTime;
         player.rigidBody.velocity = movement;   // Setting velocity had the best collision results
     }

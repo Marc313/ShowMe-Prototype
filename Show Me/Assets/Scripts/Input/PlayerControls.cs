@@ -46,9 +46,7 @@ public class PlayerControls : ScriptableObject, IInputHandler
         }
     }
 
-  
-
-    private void OnEnable()
+    public void OnEnable()
     {
         if (controls == null) Awake();
         controls.Enable();
@@ -57,7 +55,7 @@ public class PlayerControls : ScriptableObject, IInputHandler
         InteractPressed = null;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         if (controls == null) Awake();
         controls.Disable();

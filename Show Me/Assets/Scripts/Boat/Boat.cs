@@ -6,10 +6,14 @@ public class Boat : MonoBehaviour, IInteractable
 {
     public enum BoatDirection { LEFT = -1, RIGHT = 1}
 
-    [SerializeField] private float constantBoatForce = 10f;
+    [SerializeField] private float constantBoatForce;
+    [SerializeField] private float constantRotationForce;
     [SerializeField] private float rowingForce = 200f;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float boatZoom = 14f;
+    [SerializeField] private float collisionDistance = 0.2f;
+    [SerializeField] private float bounceForce = 100f;
+    [SerializeField] private Transform CollisionChecker;
     [SerializeField] private List<Transform> playerSpots = new List<Transform>();
 
     [SerializeField] private Transform FrontLeftSpots;
@@ -27,6 +31,8 @@ public class Boat : MonoBehaviour, IInteractable
     private Rigidbody rigidBody;
     private List<Player> embarkedPlayers = new List<Player>();
     private List<GameObject> pedals;
+    private RaycastHit hit;
+    
 
     private void Awake()
     {
@@ -55,7 +61,8 @@ public class Boat : MonoBehaviour, IInteractable
     {
         if (IsFull())
         {
-            rigidBody.AddForce(transform.forward * constantBoatForce * Time.deltaTime);
+            rigidBody.AddForce(Vector3.forward * constantBoatForce * Time.deltaTime);
+            rigidBody.AddTorque(transform.up * constantRotationForce);
         }
 
         foreach (Player player in playerSpotsDic.Keys)
@@ -63,6 +70,8 @@ public class Boat : MonoBehaviour, IInteractable
             int index = playerSpotsDic[player];
             player.transform.position = playerSpots[index].position;
         }
+
+        CheckContact();
     }
 
     public void OnInteract(Player _interacter)
@@ -172,6 +181,14 @@ public class Boat : MonoBehaviour, IInteractable
         rigidBody.AddTorque(transform.up * (int) _direction * rotationSpeed);
     }
 
+    private void AddBoatForce(Vector3 _direction, float _force)
+    {
+        if (rigidBody == null || !IsFull()) return;
+
+        Vector3 forceVector = _direction * _force * Time.deltaTime;
+        rigidBody.AddForce(forceVector);
+    }
+
     private void AddLeftForce()
     {
         AddBoatForce(BoatDirection.LEFT);
@@ -198,4 +215,33 @@ public class Boat : MonoBehaviour, IInteractable
             anim.CrossFade("PedalAnimation", 0);
         }
     }
+
+    private void CheckContact()
+    {
+        float boatWidth = (GetComponent<Collider>().bounds.extents.x + .3f);
+        Vector3 boxExtends = new Vector3(boatWidth, 1, collisionDistance);
+        Collider[] colliders = Physics.OverlapBox(CollisionChecker.position, boxExtends, transform.rotation);
+
+        foreach (Collider collider in colliders)
+        {
+            Player player = collider.GetComponent<Player>();
+            if (player == null && (collider.name.Contains("Stalagmite") || collider.name.Contains("Rock")))
+            {
+                Vector3 forceDirection = (collider.transform.position - transform.position).normalized;
+                Debug.Log("Whoosh");
+                AddBoatForce(-forceDirection, bounceForce);
+                break;
+            }
+        }
+    }
+
+    /*private void OnDrawGizmos()
+    {
+        Ray ray = new Ray(CollisionChecker.transform.position, CollisionChecker.transform.forward);
+        Gizmos.color = Color.red;
+        //Gizmos.DrawRay(ray, collisionDistance);
+
+        Vector3 boxExtends = new Vector3((GetComponent<Collider>().bounds.extents.x + .2f) * 2, 1, collisionDistance);
+        Gizmos.DrawCube(CollisionChecker.position, boxExtends);
+    }*/
 }
