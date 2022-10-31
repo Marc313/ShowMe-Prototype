@@ -13,6 +13,6 @@ public class DefaultMoveState : MovingState
     public override void HandleInteractInput(IStateMachineOwner _owner)
     {
         Player player = _owner as Player;
-        player.OverlapInteract();
+        player.OverlapInteractBoatPriority();
     }
 }

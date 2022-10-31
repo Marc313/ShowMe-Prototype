@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controls: {fileID: 11400000, guid: 7dcddc8e8ee197a4e9586854d16e5176, type: 2}
+  playerType: 1
   carryingPlayer: {fileID: 0}
   rigidBody: {fileID: 0}
   boat: {fileID: 0}
@@ -141,6 +142,7 @@ MonoBehaviour:
   rowingCooldownTime: 0.5
   moveMachine: {fileID: 0}
   walkingEnabled: 0
+  targetPos: {x: 0, y: 0, z: 0}
 --- !u!114 &6258980803136489150
 MonoBehaviour:
   m_ObjectHideFlags: 0

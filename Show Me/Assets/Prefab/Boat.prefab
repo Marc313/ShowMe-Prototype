@@ -450,8 +450,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20c4992fd96427644aa9bfc150162a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rowingForce: 50000
+  constantBoatForce: 150
+  rowingForce: 10000
   rotationSpeed: 100
+  boatZoom: 14
   playerSpots:
   - {fileID: 9185494307850730566}
   - {fileID: 9185494307579538121}

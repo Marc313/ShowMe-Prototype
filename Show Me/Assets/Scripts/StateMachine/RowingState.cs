@@ -43,8 +43,8 @@ public class RowingState : MovingState
     public override void HandleMovement(IStateMachineOwner _owner, float _currentSpeed)
     {
         Player player = _owner as Player;
-        int horizontal = player.controls.GetHorizontalPressed();
-        if (horizontal != 0/* && horizontal != (int)boatSide*/)
+        int horizontal = player.controls.HorizontalRaw;
+        if (horizontal != 0 && horizontal != (int)boatSide)
         {
             player.boat.SwitchSide(player, horizontal);
         }
