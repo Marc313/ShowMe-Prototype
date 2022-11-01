@@ -6,20 +6,24 @@ public class Boat : MonoBehaviour, IInteractable
 {
     public enum BoatDirection { LEFT = -1, RIGHT = 1}
 
+    [Header("Variables")]
     [SerializeField] private float constantBoatForce;
     [SerializeField] private float rowingForce = 200f;
     [SerializeField] private float rotationSpeed;
-    [SerializeField] private float boatZoom = 14f;
     [SerializeField] private float collisionDistance = 0.2f;
     [SerializeField] private float bounceForce = 100f;
-    [SerializeField] private Transform CollisionChecker;
-    [SerializeField] private List<Transform> playerSpots = new List<Transform>();
+    [SerializeField] private float boatZoom = 14f;
 
+    [Header("References")]
+    [SerializeField] private Collider downWall;
+    [SerializeField] private Collider upWall;
+    [SerializeField] private Transform CollisionChecker;
+    [Space]
     [SerializeField] private Transform FrontLeftSpots;
     [SerializeField] private Transform FrontRightSpots;
     [SerializeField] private Transform BackLeftSpots;
     [SerializeField] private Transform BackRightSpots;
-
+    [Space]
     [SerializeField] private GameObject FrontLeftPedal;
     [SerializeField] private GameObject FrontRightPedal;
     [SerializeField] private GameObject BackLeftPedal;
@@ -27,6 +31,7 @@ public class Boat : MonoBehaviour, IInteractable
 
     // Stores a Player with the index of the spot and pedal
     private Dictionary<Player, int> playerSpotsDic = new Dictionary<Player, int>();
+    private List<Transform> playerSpots = new List<Transform>();
     private Rigidbody rigidBody;
     private List<Player> embarkedPlayers = new List<Player>();
     private List<GameObject> pedals;
@@ -40,6 +45,8 @@ public class Boat : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        rigidBody.isKinematic = true;
+
         pedals = new List<GameObject> 
         { 
             FrontLeftPedal, 
@@ -54,6 +61,8 @@ public class Boat : MonoBehaviour, IInteractable
             BackLeftSpots,
             BackRightSpots
         };
+
+        downWall.gameObject.SetActive(false);
     }
     
     private void Update()
@@ -136,7 +145,7 @@ public class Boat : MonoBehaviour, IInteractable
         return embarkedPlayers.Count == 2;
     }
 
-    private void Enter(Player _player)
+    public void Enter(Player _player)
     {
         if (embarkedPlayers.Count == 0)
         {
@@ -156,11 +165,12 @@ public class Boat : MonoBehaviour, IInteractable
 
         if (IsFull())
         {
+            rigidBody.isKinematic = false;
             EventSystem.RaiseEvent(EventName.BOAT_READY, boatZoom);
         }
     }
 
-    private void Exit(Player _player)
+    public void Exit(Player _player)
     {
         embarkedPlayers.Remove(_player);
         playerSpotsDic.Remove(_player);

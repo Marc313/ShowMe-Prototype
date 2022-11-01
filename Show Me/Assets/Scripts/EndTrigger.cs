@@ -2,14 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndTrigger : MonoBehaviour
+public class EndTrigger : PlayerTrigger
 {
-    private void OnTriggerEnter(Collider other)
+    protected override void OnPlayerTriggerEnter(Player player)
     {
-        Player player = other.GetComponent<Player>();
-        if (player != null)
-        {
-            EventSystem.RaiseEvent(EventName.LEVEL_END);
-        }
+        EventSystem.RaiseEvent(EventName.LEVEL_END);
     }
 }
