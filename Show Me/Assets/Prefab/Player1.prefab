@@ -143,9 +143,9 @@ MonoBehaviour:
   rotationSpeed: 15
   pickupRange: 2.5
   rowingCooldownTime: 0.5
-  groundCheck: 0.5
+  groundCheck: 0.2
   gravityStrength: 500
-  jumpHeight: 4000
+  jumpHeight: 3000
 --- !u!114 &8766400171769801358
 MonoBehaviour:
   m_ObjectHideFlags: 0

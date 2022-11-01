@@ -8,12 +8,14 @@ public class Pickup : APickupable
     public override void OnPickup(Player _carrier)
     {
         isPickedUp = true;
+        GetComponent<Collider>().enabled = false;   
         carrier = _carrier.transform;
     }
 
     public override void OnRelease()
     {
         isPickedUp = false;
+        GetComponent<Collider>().enabled = true;
         carrier = null;
     }
 

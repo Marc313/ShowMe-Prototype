@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Pedal : APickupable
+public class Pedal : Pickup
 {
     
 }

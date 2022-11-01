@@ -15,6 +15,11 @@ public abstract class APickupable : MonoBehaviour, IPickupable
     private float CalculateModelHeight()
     {
         MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
+        if (renderer == null)
+        {
+            renderer = GetComponentInChildren<MeshRenderer>();
+        }
+
         if (renderer != null)
         {
             return renderer.bounds.extents.y;

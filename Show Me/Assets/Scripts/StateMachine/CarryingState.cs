@@ -25,7 +25,7 @@ public class CarryingState : MovingState
         base.HandleMovement(_owner, _currentSpeed);
 
         IPickupable pickupable = (IPickupable)_owner.sharedData.Get("pickedUp");
-        Vector3 yOffset = Vector3.up * (pickupable.halfModelHeight + ((IPickupable)_owner).halfModelHeight);
+        Vector3 yOffset = Vector3.up * (pickupable.halfModelHeight + ((IPickupable)_owner).halfModelHeight * 2);    // PLAYERTRANSFORMISSUE
         ((MonoBehaviour) pickupable).transform.position = ((MonoBehaviour) _owner).transform.position + yOffset;
     }
 

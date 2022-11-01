@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boat : MonoBehaviour, IInteractable
-{
+public class Boat : MonoBehaviour { 
+
     public enum BoatDirection { LEFT = -1, RIGHT = 1}
 
     [Header("Variables")]
@@ -30,6 +30,7 @@ public class Boat : MonoBehaviour, IInteractable
     [SerializeField] private GameObject BackRightPedal;
 
     // Stores a Player with the index of the spot and pedal
+    private Vector3 lastPos;
     private Dictionary<Player, int> playerSpotsDic = new Dictionary<Player, int>();
     private List<Transform> playerSpots = new List<Transform>();
     private Rigidbody rigidBody;
@@ -46,6 +47,7 @@ public class Boat : MonoBehaviour, IInteractable
     private void Start()
     {
         rigidBody.isKinematic = true;
+        lastPos = transform.position;
 
         pedals = new List<GameObject> 
         { 
@@ -72,11 +74,19 @@ public class Boat : MonoBehaviour, IInteractable
             rigidBody.AddForce(Vector3.forward * constantBoatForce * Time.deltaTime);
         }
 
-        foreach (Player player in playerSpotsDic.Keys)
+/*        foreach (Player player in playerSpotsDic.Keys)
         {
             int index = playerSpotsDic[player];
             player.transform.position = playerSpots[index].position;
+        }*/
+
+        foreach (Player player in embarkedPlayers)
+        {
+            Vector3 deltaPosition = transform.position - lastPos;
+            player.rigidBody.position += deltaPosition;
+            lastPos = transform.position;
         }
+
 
         CheckContact();
     }
@@ -147,7 +157,7 @@ public class Boat : MonoBehaviour, IInteractable
 
     public void Enter(Player _player)
     {
-        if (embarkedPlayers.Count == 0)
+        /*if (embarkedPlayers.Count == 0)
         {
             int leftSpot = _player.playerType == PlayerType.Player1 ? 0 : 2;
             playerSpotsDic.Add(_player, leftSpot);
@@ -157,7 +167,7 @@ public class Boat : MonoBehaviour, IInteractable
             int otherPlayerIndex = playerSpotsDic[embarkedPlayers[0]];
             int oppositeSpotIndex = 3 - otherPlayerIndex;
             playerSpotsDic.Add(_player, oppositeSpotIndex);
-        }
+        }*/
 
         int index = (int)_player.playerType;
         embarkedPlayers.Add(_player);
@@ -165,6 +175,7 @@ public class Boat : MonoBehaviour, IInteractable
 
         if (IsFull())
         {
+            downWall.gameObject.SetActive(true);
             rigidBody.isKinematic = false;
             EventSystem.RaiseEvent(EventName.BOAT_READY, boatZoom);
         }
