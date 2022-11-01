@@ -178,7 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   singingRange: 16.5
   deadRange: 4
-  attractionForce: 65
+  attractionForce: 100
   rotationSpeed: 0.3
 --- !u!1001 &1929651082760439239
 PrefabInstance:

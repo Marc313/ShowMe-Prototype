@@ -109,7 +109,7 @@ public class Boat : MonoBehaviour, IInteractable
     {
         if (!IsFull()) return;
         Vector3 dirVector = (_position - transform.position).normalized;
-        Vector3 forceVector = dirVector * _force * Time.fixedDeltaTime;
+        Vector3 forceVector = dirVector * _force * Time.deltaTime;
         rigidBody.AddForce(forceVector);
         RotateTowardsXZ(dirVector, _rotationSpeed);
     }
@@ -225,7 +225,7 @@ public class Boat : MonoBehaviour, IInteractable
         foreach (Collider collider in colliders)
         {
             Player player = collider.GetComponent<Player>();
-            if (player == null && (collider.name.Contains("Stalagmite") || collider.name.Contains("Rock")))
+            if (player == null && (collider.name.Contains("Stalagmite") || collider.name.Contains("Rock") || collider.name.Contains("Siren")))
             {
                 Vector3 forceDirection = (collider.transform.position - transform.position).normalized;
                 Debug.Log("Whoosh");

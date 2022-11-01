@@ -2216,13 +2216,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 78d8c60f364b56c468c7213af9ceda1e, type: 3}
   m_PrefabInstance: {fileID: 360333394}
   m_PrefabAsset: {fileID: 0}
---- !u!43 &368588596
+--- !u!43 &363536728
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaterVolume-149948
+  m_Name: WaterVolume-236352
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11463,7 +11463,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508073525}
-  m_Mesh: {fileID: 368588596}
+  m_Mesh: {fileID: 363536728}
 --- !u!23 &1508073529
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16759,6 +16759,14 @@ PrefabInstance:
     - target: {fileID: 3059198092352532674, guid: 94a050596670b3646b8d54ba3e3d82ac, type: 3}
       propertyPath: bounceForce
       value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 3059198092352532674, guid: 94a050596670b3646b8d54ba3e3d82ac, type: 3}
+      propertyPath: rowingForce
+      value: 12000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3059198092352532674, guid: 94a050596670b3646b8d54ba3e3d82ac, type: 3}
+      propertyPath: rotationSpeed
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3059198092352532674, guid: 94a050596670b3646b8d54ba3e3d82ac, type: 3}
       propertyPath: CollisionChecker
