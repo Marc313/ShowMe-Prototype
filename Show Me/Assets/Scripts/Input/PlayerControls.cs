@@ -23,8 +23,10 @@ public class PlayerControls : ScriptableObject, IInputHandler
             return 0;
         }
     }
+
     public event Action RowingPressed;
     public event Action InteractPressed;
+    public event Action JumpPressed;
 
     public void Awake()
     {
@@ -36,6 +38,7 @@ public class PlayerControls : ScriptableObject, IInputHandler
             controls.Player1.Movement.canceled += context => OnMoveStop();
             controls.Player1.InteractButton.performed += context => InteractPressed?.Invoke();
             controls.Player1.RowingButton.performed += context => RowingPressed?.Invoke();
+            controls.Player1.Jump.performed += context => JumpPressed?.Invoke();
         }
         else if (type == PlayerType.Player2)
         {
@@ -43,6 +46,7 @@ public class PlayerControls : ScriptableObject, IInputHandler
             controls.Player2.Movement.canceled += context => OnMoveStop();
             controls.Player2.InteractButton.performed += context => InteractPressed?.Invoke();
             controls.Player2.RowingButton.performed += context => RowingPressed?.Invoke();
+            controls.Player2.Jump.performed += context => JumpPressed?.Invoke();
         }
     }
 
@@ -53,6 +57,7 @@ public class PlayerControls : ScriptableObject, IInputHandler
 
         RowingPressed = null;
         InteractPressed = null;
+        JumpPressed = null;
     }
 
     public void OnDisable()

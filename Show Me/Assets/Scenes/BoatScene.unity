@@ -546,6 +546,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 0df7d8e09feade745a432c105e020471, type: 2}
     - target: {fileID: 3734818993924565491, guid: 56bed308950af674d87fb535f25f349a, type: 3}
+      propertyPath: groundCheck
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3734818993924565491, guid: 56bed308950af674d87fb535f25f349a, type: 3}
       propertyPath: carryingObjectSpeed
       value: 350
       objectReference: {fileID: 0}
@@ -563,7 +567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3734818993924565495, guid: 56bed308950af674d87fb535f25f349a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.01999998
       objectReference: {fileID: 0}
     - target: {fileID: 3734818993924565495, guid: 56bed308950af674d87fb535f25f349a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -599,7 +603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4525647856432011383, guid: 56bed308950af674d87fb535f25f349a, type: 3}
       propertyPath: m_Constraints
-      value: 116
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 4525647856432011383, guid: 56bed308950af674d87fb535f25f349a, type: 3}
       propertyPath: m_Interpolate
@@ -979,7 +983,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6069848600237277306, guid: 554f100caf74f7743b4544b882edfa1f, type: 3}
       propertyPath: m_Constraints
-      value: 116
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 6069848600237277306, guid: 554f100caf74f7743b4544b882edfa1f, type: 3}
       propertyPath: m_Interpolate
@@ -999,7 +1003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8250954428052345441, guid: 554f100caf74f7743b4544b882edfa1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 8250954428052345441, guid: 554f100caf74f7743b4544b882edfa1f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1045,6 +1049,10 @@ PrefabInstance:
       propertyPath: controls
       value: 
       objectReference: {fileID: 11400000, guid: 6060f0961e19c674db9a16b9373f697f, type: 2}
+    - target: {fileID: 8250954428052345453, guid: 554f100caf74f7743b4544b882edfa1f, type: 3}
+      propertyPath: groundCheck
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8250954428052345453, guid: 554f100caf74f7743b4544b882edfa1f, type: 3}
       propertyPath: carryingObjectSpeed
       value: 350

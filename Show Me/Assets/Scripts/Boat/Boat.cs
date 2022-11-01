@@ -7,7 +7,6 @@ public class Boat : MonoBehaviour, IInteractable
     public enum BoatDirection { LEFT = -1, RIGHT = 1}
 
     [SerializeField] private float constantBoatForce;
-    [SerializeField] private float constantRotationForce;
     [SerializeField] private float rowingForce = 200f;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float boatZoom = 14f;
@@ -62,7 +61,6 @@ public class Boat : MonoBehaviour, IInteractable
         if (IsFull())
         {
             rigidBody.AddForce(Vector3.forward * constantBoatForce * Time.deltaTime);
-            rigidBody.AddTorque(transform.up * constantRotationForce);
         }
 
         foreach (Player player in playerSpotsDic.Keys)
@@ -218,6 +216,8 @@ public class Boat : MonoBehaviour, IInteractable
 
     private void CheckContact()
     {
+        if (CollisionChecker == null) return;
+
         float boatWidth = (GetComponent<Collider>().bounds.extents.x + .3f);
         Vector3 boxExtends = new Vector3(boatWidth, 1, collisionDistance);
         Collider[] colliders = Physics.OverlapBox(CollisionChecker.position, boxExtends, transform.rotation);

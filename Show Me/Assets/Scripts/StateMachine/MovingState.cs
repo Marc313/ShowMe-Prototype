@@ -13,6 +13,7 @@ public abstract class MovingState : State
         Vector3 moveDirection = (vertical * Vector3.forward + horizontal * Vector3.right).normalized;
         player.transform.forward = moveDirection;
         Vector3 movement = moveDirection * _currentSpeed * Time.fixedDeltaTime;
+        movement.y = player.rigidBody.velocity.y;
         player.rigidBody.velocity = movement;   // Setting velocity had the best collision results
     }
 

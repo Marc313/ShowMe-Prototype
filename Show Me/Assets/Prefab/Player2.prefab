@@ -115,7 +115,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!114 &3734818993924565491
 MonoBehaviour:
@@ -134,15 +134,18 @@ MonoBehaviour:
   carryingPlayer: {fileID: 0}
   rigidBody: {fileID: 0}
   boat: {fileID: 0}
+  moveMachine: {fileID: 0}
+  walkingEnabled: 0
+  targetPos: {x: 0, y: 0, z: 0}
   speed: 500
   carryingObjectSpeed: 350
   carryingPlayerSpeed: 750
   rotationSpeed: 15
   pickupRange: 2.5
   rowingCooldownTime: 0.5
-  moveMachine: {fileID: 0}
-  walkingEnabled: 0
-  targetPos: {x: 0, y: 0, z: 0}
+  groundCheck: 0.5
+  gravityStrength: 500
+  jumpHeight: 4000
 --- !u!114 &6258980803136489150
 MonoBehaviour:
   m_ObjectHideFlags: 0
