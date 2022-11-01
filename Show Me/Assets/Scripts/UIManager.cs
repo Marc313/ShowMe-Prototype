@@ -14,12 +14,13 @@ public class UIManager : MonoBehaviour
     public Text RespawnText;
     public Text timerText;
 
-    private Timer timer = new Timer();
+    private Timer timer;
 
     private bool isPaused;
 
     private void Awake()
     {
+        timer = new Timer();
         pauseButton.performed += context => PauseSwitch();
     }
 
@@ -27,20 +28,21 @@ public class UIManager : MonoBehaviour
     {
         pauseButton.Enable();
         EventSystem.Subscribe(EventName.BOAT_READY, (name, value) => timer.Start());
-        EventSystem.Subscribe(EventName.LEVEL_END, (name, value) => ShowEndScreen(name, value));
+        EventSystem.Subscribe(EventName.LEVEL_END, (name, value) => ShowEndScreen());
     }
 
     private void OnDisable()
     {
         pauseButton.Disable();
         EventSystem.Unsubscribe(EventName.BOAT_READY, (name, value) => timer.Start());
-        EventSystem.Unsubscribe(EventName.LEVEL_END, (name, value) => ShowEndScreen(name, value));
+        EventSystem.Unsubscribe(EventName.LEVEL_END, (name, value) => ShowEndScreen());
     }
 
     private void Start()
     {
         PauseMenu.SetActive(false);
         EndScreen.SetActive(false);
+        Debug.Log(EndScreen);
     }
 
     private void Update()
@@ -84,7 +86,7 @@ public class UIManager : MonoBehaviour
         PauseMenu.SetActive(false);
     }
 
-    private void ShowEndScreen(EventName _name, object _value = null)
+    private void ShowEndScreen()
     {
         if (EndScreen == null) EndScreen = GameObject.Find("EndMenu");
 
