@@ -28,8 +28,10 @@ public class Player : APickupable, IStateMachineOwner
     private IPickupable pickedUpTarget;
     private RaycastHit groundHit;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         rigidBody = GetComponent<Rigidbody>();
         moveMachine = GetComponent<MoveStateMachine>();
     }
@@ -37,7 +39,7 @@ public class Player : APickupable, IStateMachineOwner
     private void OnEnable()
     {
         controls.OnEnable();
-        controls.RowingPressed += () => HandleRowingInput();
+        controls.RowingPressed += () => HandleUseInput();
         controls.InteractPressed += () => HandleInteractInput();
         controls.JumpPressed += () => HandleJumpInput();
     }
@@ -45,7 +47,7 @@ public class Player : APickupable, IStateMachineOwner
     private void OnDisable()
     {
         controls.OnDisable();
-        controls.RowingPressed -= () => HandleRowingInput();
+        controls.RowingPressed -= () => HandleUseInput();
         controls.InteractPressed -= () => HandleInteractInput();
         controls.JumpPressed -= () => HandleJumpInput();
 
@@ -107,6 +109,7 @@ public class Player : APickupable, IStateMachineOwner
         foreach (Collider collider in colliders)
         {
             IInteractable interactable = collider.GetComponent<IInteractable>();
+            if (interactable == null) interactable = collider.GetComponentInParent<IInteractable>();
             if (interactable is Boat)
             {
                 target = interactable;
@@ -242,7 +245,7 @@ public class Player : APickupable, IStateMachineOwner
             pickedUpTarget = _target;
             sharedData.Register("pickedUp", pickedUpTarget);
             moveMachine.SetState(new CarryingState());
-            _target.OnPickup(this);
+            _target.OnInteract(this);
         }
     }
 
@@ -256,15 +259,18 @@ public class Player : APickupable, IStateMachineOwner
         moveMachine.GetState().HandleInteractInput(this);
     }
 
-    private void HandleRowingInput()
+    private void HandleUseInput()
     {
         if (boat == null) return;
+         
+        IUsable usable = (IUsable)pickedUpTarget;
+        usable.OnUse(this);
 
-        MovingState currentState = moveMachine.GetState();
+        /*MovingState currentState = moveMachine.GetState();
         if (currentState.GetType() == typeof(RowingState))
         {
             currentState.HandleRowingInput(this);
-        }
+        }*/
     }
 
     private void HandleJumpInput()

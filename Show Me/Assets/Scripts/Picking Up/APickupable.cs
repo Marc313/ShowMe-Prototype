@@ -3,6 +3,13 @@ using UnityEngine;
 public abstract class APickupable : MonoBehaviour, IPickupable
 {
     public float halfModelHeight => CalculateModelHeight();
+    protected MeshRenderer meshRenderer;
+    protected Collider colliderr;
+
+    protected virtual void Awake()
+    {
+        InitializeColliderAndRenderer();
+    }
 
     public virtual void OnInteract(Player _interacter)
     {
@@ -14,16 +21,25 @@ public abstract class APickupable : MonoBehaviour, IPickupable
 
     private float CalculateModelHeight()
     {
-        MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
-        if (renderer == null)
+        if (meshRenderer != null)
         {
-            renderer = GetComponentInChildren<MeshRenderer>();
-        }
-
-        if (renderer != null)
-        {
-            return renderer.bounds.extents.y;
+            return meshRenderer.bounds.extents.y;
         }
         else return 0;
+    }
+
+    private void InitializeColliderAndRenderer()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer == null)
+        {
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
+        }
+
+        colliderr = GetComponent<Collider>();
+        if (colliderr == null)
+        {
+            colliderr = GetComponentInChildren<Collider>();
+        }
     }
 }

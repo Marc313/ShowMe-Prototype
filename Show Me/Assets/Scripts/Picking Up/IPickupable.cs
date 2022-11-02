@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IPickupable : IInteractable
+public interface IPickupable: IInteractable
 {
     public float halfModelHeight { get; }
 

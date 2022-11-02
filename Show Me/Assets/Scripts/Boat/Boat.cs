@@ -115,8 +115,6 @@ public class Boat : MonoBehaviour {
         {
             AddLeftForce();
         }
-
-        PlayPedalAnimation(spotIndex);
     }
 
     public void AddForceFromPosition(Vector3 _position, float _force, float _rotationSpeed)
@@ -237,16 +235,6 @@ public class Boat : MonoBehaviour {
 
         lastBoatPos = transform.position;
         lastBoatRotation = transform.rotation;
-    }
-
-    private void PlayPedalAnimation(int _pedalIndex)
-    {
-        GameObject pedal = pedals[_pedalIndex];
-        Animator anim = pedal.GetComponent<Animator>();
-        if (anim != null)
-        {
-            anim.CrossFade("PedalAnimation", 0);
-        }
     }
 
     private void CheckContact()
