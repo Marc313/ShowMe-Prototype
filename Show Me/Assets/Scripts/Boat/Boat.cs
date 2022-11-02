@@ -29,15 +29,15 @@ public class Boat : MonoBehaviour {
     [SerializeField] private GameObject BackLeftPedal;
     [SerializeField] private GameObject BackRightPedal;
 
+    private Vector3 lastBoatPos;
     // Stores a Player with the index of the spot and pedal
-    private Vector3 lastPos;
     private Dictionary<Player, int> playerSpotsDic = new Dictionary<Player, int>();
     private List<Transform> playerSpots = new List<Transform>();
     private Rigidbody rigidBody;
     private List<Player> embarkedPlayers = new List<Player>();
     private List<GameObject> pedals;
     private RaycastHit hit;
-    
+    private Quaternion lastBoatRotation;
 
     private void Awake()
     {
@@ -46,8 +46,10 @@ public class Boat : MonoBehaviour {
 
     private void Start()
     {
-        rigidBody.isKinematic = true;
-        lastPos = transform.position;
+        if (!IsFull()) rigidBody.isKinematic = true;
+
+        lastBoatPos = transform.position;
+        lastBoatRotation = transform.rotation;
 
         pedals = new List<GameObject> 
         { 
@@ -74,22 +76,17 @@ public class Boat : MonoBehaviour {
             rigidBody.AddForce(Vector3.forward * constantBoatForce * Time.deltaTime);
         }
 
-/*        foreach (Player player in playerSpotsDic.Keys)
-        {
-            int index = playerSpotsDic[player];
-            player.transform.position = playerSpots[index].position;
-        }*/
+        /*        foreach (Player player in playerSpotsDic.Keys)
+                {
+                    int index = playerSpotsDic[player];
+                    player.transform.position = playerSpots[index].position;
+                }*/
 
-        foreach (Player player in embarkedPlayers)
-        {
-            Vector3 deltaPosition = transform.position - lastPos;
-            player.rigidBody.position += deltaPosition;
-            lastPos = transform.position;
-        }
-
+        MovePlayers();
 
         CheckContact();
     }
+
 
     public void OnInteract(Player _interacter)
     {
@@ -223,6 +220,23 @@ public class Boat : MonoBehaviour {
         Vector3 newForwardXZ = Vector3.RotateTowards(transform.forward, _dirVector, _rotationSpeed * Time.fixedDeltaTime, 0.0f);
         newForwardXZ.y = transform.forward.y;        // Ignore the difference in height
         transform.forward = newForwardXZ;
+    }
+
+    private void MovePlayers()
+    {
+        foreach (Player player in embarkedPlayers)
+        {
+            Vector3 deltaPosition = transform.position - lastBoatPos;
+            player.rigidBody.position += deltaPosition;
+
+            float deltaRotationY = transform.rotation.eulerAngles.y - lastBoatRotation.eulerAngles.y;
+            player.rigidBody.rotation = Quaternion.Euler(player.rigidBody.rotation.eulerAngles.x, 
+                                                            player.rigidBody.rotation.eulerAngles.y + deltaRotationY,
+                                                            player.rigidBody.rotation.eulerAngles.z);
+        }
+
+        lastBoatPos = transform.position;
+        lastBoatRotation = transform.rotation;
     }
 
     private void PlayPedalAnimation(int _pedalIndex)

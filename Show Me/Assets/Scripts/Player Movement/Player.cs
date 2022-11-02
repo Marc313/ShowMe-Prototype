@@ -227,6 +227,7 @@ public class Player : APickupable, IStateMachineOwner
         {
             if (collider != GetComponent<Collider>())
             {
+                Debug.Log(collider.name);
                 return true;
             }
         }
