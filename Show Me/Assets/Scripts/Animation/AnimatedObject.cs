@@ -3,7 +3,7 @@ using UnityEngine;
 public class AnimatedObject : MonoBehaviour
 {
     [SerializeField] protected AnimationClip clip;
-    protected Animator animator;
+    [SerializeField] protected Animator animator;
 
     private void Awake()
     {
@@ -11,6 +11,10 @@ public class AnimatedObject : MonoBehaviour
         if (animator == null)
         {
             animator = GetComponentInParent<Animator>();
+        }
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
         }
     }
 
