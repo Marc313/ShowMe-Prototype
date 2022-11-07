@@ -10,7 +10,6 @@ Material:
   m_Name: IL3DN_Tree_Pine_Leaf
   m_Shader: {fileID: 4800000, guid: 99134b1f0c27d54469a840832a28fadf, type: 3}
   m_ValidKeywords:
-  - EFFECT_HUE_VARIATION
   - _WINDQUALITY_BEST
   m_InvalidKeywords:
   - GEOM_TYPE_LEAF
@@ -120,7 +119,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HueVariationKwToggle: 1
+    - _HueVariationKwToggle: 0
     - _Metallic: 0
     - _Mode: 0
     - _NormalMapKwToggle: 0
@@ -152,7 +151,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 1
     m_Colors:
-    - _Color: {r: 0.003921569, g: 0.94509804, b: 0.9607843, a: 1}
+    - _Color: {r: 0.16967781, g: 0.24376619, b: 0.2924528, a: 1}
     - _Color0: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _HueVariation: {r: 1, g: 0.8997179, b: 0.740566, a: 1}
