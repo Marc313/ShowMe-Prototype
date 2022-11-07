@@ -30,7 +30,7 @@ public class RowingState : MovingState
 
         if (timer > 0) timer -= Time.deltaTime;
     }
-
+/*
     public override void HandleRowingInput(IStateMachineOwner _owner)
     {
         if (timer > 0) return;
@@ -48,7 +48,7 @@ public class RowingState : MovingState
         {
             player.boat.SwitchSide(player, horizontal);
         }
-    }
+    }*/
 
     public override void HandleInteractInput(IStateMachineOwner _owner)
     {

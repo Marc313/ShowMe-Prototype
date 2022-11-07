@@ -28,6 +28,11 @@ public class Player : APickupable, IStateMachineOwner
     private IPickupable pickedUpTarget;
     private RaycastHit groundHit;
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("PLAYER: " + collision.gameObject.name);
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -63,15 +68,17 @@ public class Player : APickupable, IStateMachineOwner
         sharedData.Register("carryingPlayerSpeed", carryingPlayerSpeed);
     }
 
-    private void Update()
+    protected override void Update()
     {
-        Debug.Log($"IsGrounded: {IsGrounded()}");
+        base.Update();
+        //Debug.Log($"IsGrounded: {IsGrounded()}");
         if (!IsGrounded()) ApplyGravity();
         HandleMovement();
     }
 
     public override void OnPickup(Player _carrier)
     {
+        base.OnPickup(_carrier);
         carryingPlayer = _carrier;
         walkingEnabled = false;
         moveMachine.SetState(new PickedupState());
@@ -79,6 +86,7 @@ public class Player : APickupable, IStateMachineOwner
 
     public override void OnRelease()
     {
+        base.OnRelease();
         carryingPlayer = null;
         moveMachine.SetState(new DefaultMoveState());
     }
@@ -188,8 +196,12 @@ public class Player : APickupable, IStateMachineOwner
 
     public void FreeTarget()
     {
-        MonoBehaviour target = (MonoBehaviour)pickedUpTarget;
-        target.transform.position = transform.position + transform.forward * .2f;
+        if (!pickedUpTarget.locked)
+        {
+            MonoBehaviour target = (MonoBehaviour)pickedUpTarget;
+            target.transform.position = transform.position + transform.forward * .2f;
+        }
+        
         pickedUpTarget.OnRelease();
 
         moveMachine.SetState(new DefaultMoveState());
@@ -228,10 +240,10 @@ public class Player : APickupable, IStateMachineOwner
 
         foreach (Collider collider in colliders)
         {
-            if (collider != GetComponent<Collider>())
+            if (collider != GetComponent<Collider>() && !collider.isTrigger)
             {
-                Debug.Log(collider.name);
-                return true;
+/*                Debug.Log(collider.name);
+*/                return true;
             }
         }
 

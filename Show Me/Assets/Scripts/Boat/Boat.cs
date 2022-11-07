@@ -18,11 +18,11 @@ public class Boat : MonoBehaviour {
     [SerializeField] private Collider downWall;
     [SerializeField] private Collider upWall;
     [SerializeField] private Transform CollisionChecker;
-    [Space]
+/*    [Space]
     [SerializeField] private Transform FrontLeftSpots;
     [SerializeField] private Transform FrontRightSpots;
     [SerializeField] private Transform BackLeftSpots;
-    [SerializeField] private Transform BackRightSpots;
+    [SerializeField] private Transform BackRightSpots;*/
     [Space]
     [SerializeField] private GameObject FrontLeftPedal;
     [SerializeField] private GameObject FrontRightPedal;
@@ -31,13 +31,18 @@ public class Boat : MonoBehaviour {
 
     private Vector3 lastBoatPos;
     // Stores a Player with the index of the spot and pedal
-    private Dictionary<Player, int> playerSpotsDic = new Dictionary<Player, int>();
-    private List<Transform> playerSpots = new List<Transform>();
+    //private Dictionary<Player, int> playerSpotsDic = new Dictionary<Player, int>();
+    //private List<Transform> playerSpots = new List<Transform>();
     private Rigidbody rigidBody;
     private List<Player> embarkedPlayers = new List<Player>();
     private List<GameObject> pedals;
     private RaycastHit hit;
     private Quaternion lastBoatRotation;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
+    }
 
     private void Awake()
     {
@@ -58,13 +63,13 @@ public class Boat : MonoBehaviour {
             BackLeftPedal,
             BackRightPedal, 
         };
-        playerSpots = new List<Transform>
+/*        playerSpots = new List<Transform>
         {
             FrontLeftSpots,
             FrontRightSpots,
             BackLeftSpots,
             BackRightSpots
-        };
+        };*/
 
         downWall.gameObject.SetActive(false);
     }
@@ -99,7 +104,7 @@ public class Boat : MonoBehaviour {
             Enter(_interacter);
         }
     }
-
+/*
     public void AddRowForce(Player _player)
     {
         if (!IsFull()) return;
@@ -115,18 +120,16 @@ public class Boat : MonoBehaviour {
         {
             AddLeftForce();
         }
-    }
+    }*/
 
     public void AddForceFromPosition(Vector3 _position, float _force, float _rotationSpeed)
     {
-        if (!IsFull()) return;
         Vector3 dirVector = (_position - transform.position).normalized;
-        Vector3 forceVector = dirVector * _force * Time.deltaTime;
-        rigidBody.AddForce(forceVector);
+        AddBoatForce(dirVector, _force);
         RotateTowardsXZ(dirVector, _rotationSpeed);
     }
 
-    public void SwitchSide(Player _player, int _horizontal)
+/*    public void SwitchSide(Player _player, int _horizontal)
     {
         // Player 1: Slots 0 and 1, Player 2: Slots 2 and 3
         // When 0 of 2 (even, so left spot), _horizontal should be +1 and player should switch to right
@@ -143,7 +146,7 @@ public class Boat : MonoBehaviour {
         {
             Debug.Log("No switches?");
         }
-    }
+    }*/
 
     public bool IsFull()
     {
@@ -179,13 +182,13 @@ public class Boat : MonoBehaviour {
     public void Exit(Player _player)
     {
         embarkedPlayers.Remove(_player);
-        playerSpotsDic.Remove(_player);
+        //playerSpotsDic.Remove(_player);
         _player.boat = null;
 
         EventSystem.RaiseEvent(EventName.BOAT_EXIT);
     }
 
-    private void AddBoatForce(BoatDirection _direction)
+    public void AddRowForce(BoatDirection _direction)
     {
         if (rigidBody == null || !IsFull()) return;
 
@@ -193,6 +196,16 @@ public class Boat : MonoBehaviour {
         Vector3 forceVector = dirVector * rowingForce * Time.deltaTime;
         rigidBody.AddForce(forceVector);
         rigidBody.AddTorque(transform.up * (int) _direction * rotationSpeed);
+    }
+
+    public void AddRowForceFromPosition(BoatDirection _direction, Vector3 _position)
+    {
+        if (rigidBody == null || !IsFull()) return;
+
+        Vector3 dirVector = ((int)_direction * transform.right + transform.forward).normalized;
+        Vector3 forceVector = dirVector * rowingForce * Time.deltaTime;
+        rigidBody.AddForceAtPosition(forceVector, _position);
+        rigidBody.AddTorque(transform.up * (int)_direction * rotationSpeed);
     }
 
     private void AddBoatForce(Vector3 _direction, float _force)
@@ -205,12 +218,12 @@ public class Boat : MonoBehaviour {
 
     private void AddLeftForce()
     {
-        AddBoatForce(BoatDirection.LEFT);
+        AddRowForce(BoatDirection.LEFT);
     }
 
     private void AddRightForce()
     {
-        AddBoatForce(BoatDirection.RIGHT);
+        AddRowForce(BoatDirection.RIGHT);
     }
 
     private void RotateTowardsXZ(Vector3 _dirVector, float _rotationSpeed)
@@ -227,10 +240,12 @@ public class Boat : MonoBehaviour {
             Vector3 deltaPosition = transform.position - lastBoatPos;
             player.rigidBody.position += deltaPosition;
 
-            float deltaRotationY = transform.rotation.eulerAngles.y - lastBoatRotation.eulerAngles.y;
-            player.rigidBody.rotation = Quaternion.Euler(player.rigidBody.rotation.eulerAngles.x, 
-                                                            player.rigidBody.rotation.eulerAngles.y + deltaRotationY,
-                                                            player.rigidBody.rotation.eulerAngles.z);
+            /*            float deltaRotationY = transform.rotation.eulerAngles.y - lastBoatRotation.eulerAngles.y;
+                        player.rigidBody.rotation = Quaternion.Euler(player.rigidBody.rotation.eulerAngles.x, 
+                                                                        player.rigidBody.rotation.eulerAngles.y + deltaRotationY,
+                                                                        player.rigidBody.rotation.eulerAngles.z);*/
+
+            player.rigidBody.rotation = transform.rotation;
         }
 
         lastBoatPos = transform.position;

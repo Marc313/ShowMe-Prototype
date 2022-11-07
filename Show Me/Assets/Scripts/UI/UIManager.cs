@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
     {
         PauseMenu.SetActive(false);
         EndScreen.SetActive(false);
-        Debug.Log(EndScreen);
+        //Debug.Log(EndScreen);
     }
 
     private void Update()

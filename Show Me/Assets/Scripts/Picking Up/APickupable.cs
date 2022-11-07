@@ -2,13 +2,23 @@ using UnityEngine;
 
 public abstract class APickupable : MonoBehaviour, IPickupable
 {
+    public virtual bool locked => false;
     public float halfModelHeight => CalculateModelHeight();
+
     protected MeshRenderer meshRenderer;
     protected Collider colliderr;
+
+    protected Transform carrier;
+    protected bool isPickedUp;
 
     protected virtual void Awake()
     {
         InitializeColliderAndRenderer();
+    }
+
+    protected virtual void Update()
+    {
+        FollowCarrier();
     }
 
     public virtual void OnInteract(Player _interacter)
@@ -16,8 +26,19 @@ public abstract class APickupable : MonoBehaviour, IPickupable
         OnPickup(_interacter);
     }
 
-    public virtual void OnPickup(Player _carrier) { }
-    public virtual void OnRelease() { }
+    public virtual void OnPickup(Player _carrier)
+    {
+        isPickedUp = true;
+        colliderr.enabled = false;
+        carrier = _carrier.transform;
+    }
+
+    public virtual void OnRelease()
+    {
+        isPickedUp = false;
+        colliderr.enabled = true;
+        carrier = null;
+    }
 
     private float CalculateModelHeight()
     {
@@ -40,6 +61,14 @@ public abstract class APickupable : MonoBehaviour, IPickupable
         if (colliderr == null)
         {
             colliderr = GetComponentInChildren<Collider>();
+        }
+    }
+
+    protected virtual void FollowCarrier()
+    {
+        if (isPickedUp && carrier != null)
+        {
+            transform.position = carrier.position + carrier.up * (halfModelHeight + ((IPickupable)carrier.GetComponent<Player>()).halfModelHeight);
         }
     }
 }
