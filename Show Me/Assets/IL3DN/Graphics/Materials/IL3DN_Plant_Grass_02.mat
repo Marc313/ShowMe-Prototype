@@ -10,7 +10,6 @@ Material:
   m_Name: IL3DN_Plant_Grass_02
   m_Shader: {fileID: 4800000, guid: 99134b1f0c27d54469a840832a28fadf, type: 3}
   m_ValidKeywords:
-  - EFFECT_BILLBOARD
   - _WINDQUALITY_BEST
   m_InvalidKeywords:
   - GEOM_TYPE_LEAF
@@ -115,7 +114,7 @@ Material:
     - _AlphaCutoff: 0.5
     - _Bend: 1
     - _BendStrenght: 1
-    - _BillboardKwToggle: 1
+    - _BillboardKwToggle: 0
     - _BillboardShadowFade: 0.5
     - _BumpScale: 1
     - _Cull: 0
