@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public InputAction pauseButton;
     public GameObject PauseMenu;
     public GameObject EndScreen;
+    public GameObject Vignette;
 
     public Text RespawnText;
     public Text timerText;
@@ -93,5 +94,23 @@ public class UIManager : MonoBehaviour
         EndScreen.SetActive(true);
         RespawnText.text = $"Total Time: {timer.TimeToString()}";
         timerText.gameObject.SetActive(false);
+    }
+
+    public void ShowVignette()
+    {
+       // Debug.Log("SHOW");
+        Vignette.gameObject.SetActive(true);
+    }
+
+    public void ScaleVignette(Vector3 _scale)
+    {
+        Vignette.gameObject.transform.localScale = _scale;
+    }
+
+    public void HideVignette()
+    {
+        //Debug.Log("HIDE");
+
+        Vignette.gameObject.SetActive(false);
     }
 }

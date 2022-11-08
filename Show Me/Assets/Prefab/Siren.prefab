@@ -60,10 +60,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c3ea9928f11124faf9c0c233c284d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  singingRange: 16.5
+  singingRange: 14
   deadRange: 4
   attractionForce: 100
   rotationSpeed: 0.3
+  maxScale: {x: 2.5, y: 3.5, z: 3.5}
+  minScale: {x: 3.7, y: 5.2, z: 5.2}
+  minSirenDistance: 5
+  volume: {fileID: 0}
 --- !u!1001 &1929651082760439239
 PrefabInstance:
   m_ObjectHideFlags: 0
