@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Player : APickupable, IStateMachineOwner
 {
@@ -24,6 +25,8 @@ public class Player : APickupable, IStateMachineOwner
     [SerializeField] private float gravityStrength;
     [SerializeField] private float jumpHeight;
 
+    public VisualEffect visualEffect;
+
     private float startY;
 
     private float currentSpeed;
@@ -31,6 +34,7 @@ public class Player : APickupable, IStateMachineOwner
     private RaycastHit groundHit;
 
     private bool yConstraint = true;
+
 /*
     private void OnCollisionEnter(Collision collision)
     {
@@ -43,6 +47,7 @@ public class Player : APickupable, IStateMachineOwner
 
         rigidBody = GetComponent<Rigidbody>();
         moveMachine = GetComponent<MoveStateMachine>();
+        visualEffect = GetComponentInChildren<VisualEffect>();
     }
 
     private void OnEnable()

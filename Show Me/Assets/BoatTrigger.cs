@@ -15,6 +15,9 @@ public class BoatTrigger : MonoBehaviour
             boat.rigidBody.isKinematic = true;
             boat.transform.position = boatPos.position;
             boat.transform.forward = Vector3.forward;
+
+            boat.vfx1.enabled = false;
+            boat.vfx2.enabled = false;
         }
     }
 

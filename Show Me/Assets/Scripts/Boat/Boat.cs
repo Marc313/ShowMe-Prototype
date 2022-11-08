@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Boat : MonoBehaviour { 
 
@@ -33,6 +34,9 @@ public class Boat : MonoBehaviour {
     private RaycastHit hit;
     private Quaternion lastBoatRotation;
 
+    public VisualEffect vfx1;
+    public VisualEffect vfx2;
+
     private void Awake()
     {
         rigidBody = gameObject.GetComponent<Rigidbody>();
@@ -57,11 +61,8 @@ public class Boat : MonoBehaviour {
 
         downWall.gameObject.SetActive(false);
 
-
-        foreach (GameObject gameObject in pedals)
-        {
-            //gameObject.GetComponentInChildren<Collider>().enabled = false;
-        }
+        vfx1.enabled = false;
+        vfx2.enabled = false;
     }
     
     private void Update()
@@ -173,7 +174,8 @@ public class Boat : MonoBehaviour {
             rigidBody.isKinematic = false;
             EventSystem.RaiseEvent(EventName.BOAT_READY, boatZoom);
             gameObject.layer = LayerMask.NameToLayer("Boat");
-
+            vfx1.enabled = true;
+            vfx2.enabled = true;
         }
     }
 

@@ -17,7 +17,12 @@ public abstract class MovingState : State
 
         if (moveDirection.magnitude > .1f)
         {
+            player.visualEffect.enabled = true;
             player.transform.forward = moveDirection;
+        }
+        else
+        {
+            player.visualEffect.enabled = false;
         }
     }
 
