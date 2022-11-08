@@ -29,6 +29,8 @@ public class Player : APickupable, IStateMachineOwner
     private float currentSpeed;
     private IPickupable pickedUpTarget;
     private RaycastHit groundHit;
+
+    private bool yConstraint = true;
 /*
     private void OnCollisionEnter(Collision collision)
     {
@@ -79,13 +81,27 @@ public class Player : APickupable, IStateMachineOwner
         if (!IsGrounded()) ApplyGravity();
         HandleMovement();
         CheckHeight();
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (yConstraint)
+            {
+                rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+                yConstraint = false;
+            }
+            else
+            {
+                rigidBody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+                yConstraint = true;
+            }
+        }
     }
 
     private void CheckHeight()
     {
         if (Math.Abs(transform.position.y - startY) > 5f)
         {
-            transform.position = FindObjectOfType<Boat>().transform.position + Vector3.up;
+            transform.position = FindObjectOfType<Boat>().transform.position + Vector3.up * 4;
         }
     }
 
@@ -230,7 +246,10 @@ public class Player : APickupable, IStateMachineOwner
 
     private void ApplyGravity()
     {
-        rigidBody.velocity = -gravityStrength * Vector3.up * Time.deltaTime;
+        Vector3 velocity = rigidBody.velocity;
+        velocity.y = -gravityStrength * Time.deltaTime;
+        rigidBody.velocity = velocity;
+
     }
 
     public void Jump()
@@ -253,7 +272,7 @@ public class Player : APickupable, IStateMachineOwner
 
         foreach (Collider collider in colliders)
         {
-            if (collider != GetComponent<Collider>() && !collider.isTrigger)
+            if (collider != GetComponentInChildren<Collider>() && !collider.isTrigger)
             {
 /*                Debug.Log(collider.name);
 */                return true;

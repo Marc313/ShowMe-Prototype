@@ -27,7 +27,7 @@ public class Boat : MonoBehaviour {
 
     private bool useConstantForce;
     private Vector3 lastBoatPos;
-    private Rigidbody rigidBody;
+    public Rigidbody rigidBody;
     private List<Player> embarkedPlayers = new List<Player>();
     private List<GameObject> pedals;
     private RaycastHit hit;
@@ -40,6 +40,8 @@ public class Boat : MonoBehaviour {
 
     private void Start()
     {
+        gameObject.layer = LayerMask.NameToLayer("Default");
+
         if (!IsFull()) rigidBody.isKinematic = true;
 
         lastBoatPos = transform.position;
@@ -54,6 +56,12 @@ public class Boat : MonoBehaviour {
         };
 
         downWall.gameObject.SetActive(false);
+
+
+        foreach (GameObject gameObject in pedals)
+        {
+            //gameObject.GetComponentInChildren<Collider>().enabled = false;
+        }
     }
     
     private void Update()
@@ -67,6 +75,8 @@ public class Boat : MonoBehaviour {
 
         CheckContact();
         CheckLand();
+
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
 
     private void CheckLand()
@@ -151,6 +161,8 @@ public class Boat : MonoBehaviour {
             playerSpotsDic.Add(_player, oppositeSpotIndex);
         }*/
 
+        //if (embarkedPlayers.Contains(_player)) return;
+
         int index = (int)_player.playerType;
         embarkedPlayers.Add(_player);
         _player.boat = this;
@@ -160,6 +172,8 @@ public class Boat : MonoBehaviour {
             downWall.gameObject.SetActive(true);
             rigidBody.isKinematic = false;
             EventSystem.RaiseEvent(EventName.BOAT_READY, boatZoom);
+            gameObject.layer = LayerMask.NameToLayer("Boat");
+
         }
     }
 
