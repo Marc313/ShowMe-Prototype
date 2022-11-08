@@ -46,6 +46,10 @@ public abstract class APickupable : MonoBehaviour, IPickupable
         {
             return meshRenderer.bounds.extents.y;
         }
+        else if (colliderr != null)
+        {
+            return colliderr.bounds.extents.y;
+        }
         else return 0;
     }
 
