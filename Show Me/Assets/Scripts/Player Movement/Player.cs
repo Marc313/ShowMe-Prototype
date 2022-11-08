@@ -24,15 +24,17 @@ public class Player : APickupable, IStateMachineOwner
     [SerializeField] private float gravityStrength;
     [SerializeField] private float jumpHeight;
 
+    private float startY;
+
     private float currentSpeed;
     private IPickupable pickedUpTarget;
     private RaycastHit groundHit;
-
+/*
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("PLAYER: " + collision.gameObject.name);
     }
-
+*/
     protected override void Awake()
     {
         base.Awake();
@@ -66,6 +68,8 @@ public class Player : APickupable, IStateMachineOwner
         sharedData.Register("defaultSpeed", speed);
         sharedData.Register("carryingSpeed", carryingObjectSpeed);
         sharedData.Register("carryingPlayerSpeed", carryingPlayerSpeed);
+
+        startY = transform.position.y;
     }
 
     protected override void Update()
@@ -74,6 +78,15 @@ public class Player : APickupable, IStateMachineOwner
         //Debug.Log($"IsGrounded: {IsGrounded()}");
         if (!IsGrounded()) ApplyGravity();
         HandleMovement();
+        CheckHeight();
+    }
+
+    private void CheckHeight()
+    {
+        if (Math.Abs(transform.position.y - startY) > 5f)
+        {
+            transform.position = FindObjectOfType<Boat>().transform.position + Vector3.up;
+        }
     }
 
     public override void OnPickup(Player _carrier)
@@ -254,6 +267,11 @@ public class Player : APickupable, IStateMachineOwner
     {
         if (_target != null)
         {
+            if (_target is Player)
+            {
+                if (((Player)_target).pickedUpTarget != null) return;
+            }
+
             pickedUpTarget = _target;
             sharedData.Register("pickedUp", pickedUpTarget);
             moveMachine.SetState(new CarryingState());
@@ -273,7 +291,7 @@ public class Player : APickupable, IStateMachineOwner
 
     private void HandleUseInput()
     {
-        if (boat == null) return;
+        if (boat == null || pickedUpTarget == null) return;
          
         IUsable usable = (IUsable)pickedUpTarget;
         usable.OnUse(this);

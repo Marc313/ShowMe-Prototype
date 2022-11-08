@@ -18,31 +18,20 @@ public class Boat : MonoBehaviour {
     [SerializeField] private Collider downWall;
     [SerializeField] private Collider upWall;
     [SerializeField] private Transform CollisionChecker;
-/*    [Space]
-    [SerializeField] private Transform FrontLeftSpots;
-    [SerializeField] private Transform FrontRightSpots;
-    [SerializeField] private Transform BackLeftSpots;
-    [SerializeField] private Transform BackRightSpots;*/
+
     [Space]
     [SerializeField] private GameObject FrontLeftPedal;
     [SerializeField] private GameObject FrontRightPedal;
     [SerializeField] private GameObject BackLeftPedal;
     [SerializeField] private GameObject BackRightPedal;
 
+    private bool useConstantForce;
     private Vector3 lastBoatPos;
-    // Stores a Player with the index of the spot and pedal
-    //private Dictionary<Player, int> playerSpotsDic = new Dictionary<Player, int>();
-    //private List<Transform> playerSpots = new List<Transform>();
     private Rigidbody rigidBody;
     private List<Player> embarkedPlayers = new List<Player>();
     private List<GameObject> pedals;
     private RaycastHit hit;
     private Quaternion lastBoatRotation;
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
-    }
 
     private void Awake()
     {
@@ -63,13 +52,6 @@ public class Boat : MonoBehaviour {
             BackLeftPedal,
             BackRightPedal, 
         };
-/*        playerSpots = new List<Transform>
-        {
-            FrontLeftSpots,
-            FrontRightSpots,
-            BackLeftSpots,
-            BackRightSpots
-        };*/
 
         downWall.gameObject.SetActive(false);
     }
@@ -81,17 +63,55 @@ public class Boat : MonoBehaviour {
             rigidBody.AddForce(Vector3.forward * constantBoatForce * Time.deltaTime);
         }
 
-        /*        foreach (Player player in playerSpotsDic.Keys)
-                {
-                    int index = playerSpotsDic[player];
-                    player.transform.position = playerSpots[index].position;
-                }*/
-
         MovePlayers();
 
         CheckContact();
+        CheckLand();
     }
 
+    private void CheckLand()
+    {
+        if (GroundInRangeOfWall(upWall.transform.position, 3f))
+        {
+            upWall.gameObject.SetActive(false);
+            Debug.Log("Upwall Off");
+            useConstantForce = false;    // enable constant force when away from land
+        }
+        else if (!upWall.gameObject.activeSelf)
+        {
+            upWall.gameObject.SetActive(true);
+        }
+
+        if (GroundInRangeOfWall(downWall.transform.position, 3f))
+        {
+            downWall.gameObject.SetActive(false);
+            Debug.Log("Downwall Off");
+        }
+        else if (!downWall.gameObject.activeSelf)
+        {
+            downWall.gameObject.SetActive(true);
+        }
+
+        if (upWall.gameObject.activeSelf)
+        {
+            useConstantForce = true;    // enable constant force when away from land
+        }
+    }
+
+    private bool GroundInRangeOfWall(Vector3 _wallPos, float _range)
+    {
+        Collider[] colliders = Physics.OverlapSphere(_wallPos, _range);
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public void OnInteract(Player _interacter)
     {
@@ -104,23 +124,6 @@ public class Boat : MonoBehaviour {
             Enter(_interacter);
         }
     }
-/*
-    public void AddRowForce(Player _player)
-    {
-        if (!IsFull()) return;
-
-        int spotIndex = playerSpotsDic[_player];
-
-        // Even spot mean Left Side, Odd means Right Side
-        if (spotIndex % 2 == 0)
-        {
-            AddRightForce();
-        }
-        else if (spotIndex % 2 == 1)
-        {
-            AddLeftForce();
-        }
-    }*/
 
     public void AddForceFromPosition(Vector3 _position, float _force, float _rotationSpeed)
     {
@@ -128,25 +131,6 @@ public class Boat : MonoBehaviour {
         AddBoatForce(dirVector, _force);
         RotateTowardsXZ(dirVector, _rotationSpeed);
     }
-
-/*    public void SwitchSide(Player _player, int _horizontal)
-    {
-        // Player 1: Slots 0 and 1, Player 2: Slots 2 and 3
-        // When 0 of 2 (even, so left spot), _horizontal should be +1 and player should switch to right
-        // When 1 and 3 (right spot), _horizontal should be -1 and player should switch to left
-        int oldIndex = playerSpotsDic[_player];
-        int newIndex = oldIndex + _horizontal;
-
-        if ((oldIndex % 2 == 0 && _horizontal == 1)
-            || (oldIndex % 2 == 1 && _horizontal == -1))
-        {
-            playerSpotsDic[_player] = newIndex;
-        }
-        else
-        {
-            Debug.Log("No switches?");
-        }
-    }*/
 
     public bool IsFull()
     {
@@ -263,23 +247,12 @@ public class Boat : MonoBehaviour {
         foreach (Collider collider in colliders)
         {
             Player player = collider.GetComponent<Player>();
-            if (player == null && (collider.name.Contains("Stalagmite") || collider.name.Contains("Rock") || collider.name.Contains("Siren")))
+            if (player == null && (collider.name.Contains("Stalagmite") || collider.name.Contains("Rock") || collider.name.Contains("Siren") || collider.name.Contains("WaterWall")))
             {
                 Vector3 forceDirection = (collider.transform.position - transform.position).normalized;
-                Debug.Log("Whoosh");
                 AddBoatForce(-forceDirection, bounceForce);
                 break;
             }
         }
     }
-
-    /*private void OnDrawGizmos()
-    {
-        Ray ray = new Ray(CollisionChecker.transform.position, CollisionChecker.transform.forward);
-        Gizmos.color = Color.red;
-        //Gizmos.DrawRay(ray, collisionDistance);
-
-        Vector3 boxExtends = new Vector3((GetComponent<Collider>().bounds.extents.x + .2f) * 2, 1, collisionDistance);
-        Gizmos.DrawCube(CollisionChecker.position, boxExtends);
-    }*/
 }

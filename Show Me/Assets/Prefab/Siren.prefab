@@ -61,13 +61,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   singingRange: 14
-  deadRange: 4
-  attractionForce: 100
+  attractionForce: 80
   rotationSpeed: 0.3
-  maxScale: {x: 2.5, y: 3.5, z: 3.5}
-  minScale: {x: 3.7, y: 5.2, z: 5.2}
-  minSirenDistance: 5
-  volume: {fileID: 0}
 --- !u!1001 &1929651082760439239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,6 +179,22 @@ PrefabInstance:
     - target: {fileID: 6826397710710775570, guid: ee50e46de05c1bc40b90b045fb3efc67, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826397710710775571, guid: ee50e46de05c1bc40b90b045fb3efc67, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826397710710775571, guid: ee50e46de05c1bc40b90b045fb3efc67, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Name
+      value: sirenRange
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826397710710775571, guid: ee50e46de05c1bc40b90b045fb3efc67, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Value
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826397710710775571, guid: ee50e46de05c1bc40b90b045fb3efc67, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Overridden
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee50e46de05c1bc40b90b045fb3efc67, type: 3}
